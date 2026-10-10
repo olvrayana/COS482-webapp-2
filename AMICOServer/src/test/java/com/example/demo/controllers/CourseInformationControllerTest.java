@@ -59,11 +59,11 @@ class CourseInformationControllerTest {
 
     private Model model;
 
-    /** Curso que o usuário tenta se inscrever (id 1, com 5 inscritos). */
+    /** Curso em que o usuário tenta se inscrever (id 1, com 5 inscritos). */
     private Course curso;
     private User usuario;
 
-    // Listas que os mocks devolvem
+    // Listas que os mocks devolvem; os testes as preenchem conforme o cenário
     private List<User> inscritosNoCurso;
     private List<Course> cursosDoUsuario;
     private List<Course> cursosConcluidos;
@@ -150,5 +150,90 @@ class CourseInformationControllerTest {
         assertEquals(Boolean.TRUE, pagina.asMap().get("error"));
         String mensagem = (String) pagina.asMap().get("message");
         assertTrue(mensagem.startsWith("To register for a course it is necessary to be logged into the system."));
+    }
+
+    // ---------- inscrição com sucesso ----------
+
+    @Test
+    void usuarioSemHistorico_inscreveEVaiParaOPerfil() {
+        usuarioLogado();
+
+        RedirectView resposta = inscrever();
+
+        assertEquals("/profile/ana", resposta.getUrl());
+    }
+
+    @Test
+    void usuarioSemHistorico_salvaUsuarioECurso() {
+        usuarioLogado();
+
+        inscrever();
+
+        verify(userRepository).save(usuario);
+        verify(courseRepository).save(curso);
+    }
+
+    @Test
+    void usuarioSemHistorico_somaUmAoNumeroDeUsuariosDoCurso() {
+        usuarioLogado();
+
+        inscrever();
+
+        verify(curso).setNumberOfUsers(6);
+    }
+
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    void usuarioSemHistorico_cursoEntraNaListaDeCursosDoUsuario() {
+        usuarioLogado();
+
+        inscrever();
+
+        ArgumentCaptor<List> capturado = ArgumentCaptor.forClass(List.class);
+        verify(usuario).setInscribedCourses(capturado.capture());
+        assertEquals(Arrays.asList(curso), capturado.getValue());
+    }
+
+    @Test
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    void usuarioSemHistorico_usuarioEntraNaListaDeInscritosDoCurso() {
+        usuarioLogado();
+
+        inscrever();
+
+        ArgumentCaptor<List> capturado = ArgumentCaptor.forClass(List.class);
+        verify(curso).setInscribedUsers(capturado.capture());
+        assertEquals(Arrays.asList(usuario), capturado.getValue());
+    }
+
+    @Test
+    void usuarioComOutrasInscricoes_mantemAsAnterioresEAdicionaOCursoNoFim() {
+        usuarioLogado();
+        Course outro = cursoComId(2L);
+        cursosDoUsuario.add(outro);
+        User outroUsuario = mock(User.class);
+        inscritosNoCurso.add(outroUsuario);
+
+        RedirectView resposta = inscrever();
+
+        assertEquals("/profile/ana", resposta.getUrl());
+        assertEquals(Arrays.asList(outro, curso), cursosDoUsuario);
+        assertEquals(Arrays.asList(outroUsuario, usuario), inscritosNoCurso);
+        verify(usuario).setInscribedCourses(cursosDoUsuario);
+        verify(curso).setInscribedUsers(inscritosNoCurso);
+    }
+
+    @Test
+    void usuarioQueConcluiuOutroCurso_aindaPodeSeInscreverNesteCurso() {
+        usuarioLogado();
+        Course concluido = cursoComId(3L);
+        cursosDoUsuario.add(concluido);
+        cursosConcluidos.add(concluido);
+
+        RedirectView resposta = inscrever();
+
+        assertEquals("/profile/ana", resposta.getUrl());
+        assertEquals(Arrays.asList(concluido, curso), cursosDoUsuario);
+        verify(userRepository).save(usuario);
     }
 }
