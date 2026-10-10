@@ -314,4 +314,31 @@ class CourseInformationControllerTest {
 
         assertNadaFoiSalvo();
     }
+
+    // ---------- estado guardado no controller ----------
+
+    @Test
+    void mensagemDeErroSoApareceUmaVez_depoisOErroEhLimpo() {
+        when(sessionUserComponent.isLoggedUser()).thenReturn(false);
+        inscrever();
+
+        Model primeiraVisita = paginaDoCurso();
+        Model segundaVisita = paginaDoCurso();
+
+        assertEquals(Boolean.TRUE, primeiraVisita.asMap().get("error"));
+        assertEquals(Boolean.FALSE, segundaVisita.asMap().get("error"));
+    }
+
+    // ---------- comportamento atual com curso inexistente ----------
+
+    @Test
+    void cursoInexistente_comportamentoAtual_lancaNullPointerException() {
+        // Possível bug: o método não trata findByInternalName devolvendo null e
+        // quebra com NullPointerException em vez de mostrar uma página de erro.
+        // O teste registra o comportamento atual; se o bug for corrigido, troque
+        // a asserção pelo redirecionamento esperado.
+        usuarioLogado();
+
+        assertThrows(NullPointerException.class, () -> controller.addCourseToUser(model, "curso-que-nao-existe"));
+    }
 }
