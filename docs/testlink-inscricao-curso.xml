@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcases>
+  <testcase name="CT-INSC-01 - Visitante sem login tenta se inscrever em um curso">
+    <summary><![CDATA[Verificar que um visitante não logado não consegue se inscrever e recebe o aviso de login.]]></summary>
+    <preconditions><![CDATA[Aplicação rodando. Nenhum usuário logado (use uma janela anônima).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/introduction-to-ai2]]></actions>
+        <expectedresults><![CDATA[A página do curso Introduction to AI2 é exibida, com o botão "Add Course".]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Clicar em "Add Course"]]></actions>
+        <expectedresults><![CDATA[O sistema volta para a página do curso e mostra um alerta azul com o texto "To register for a course it is necessary to be logged into the system. Press AMICOURSES to return to the main screen...".]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-02 - Inscrição com sucesso em um curso novo">
+    <summary><![CDATA[Verificar o fluxo principal: um aluno logado se inscreve em um curso em que ainda não está.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada (dados originais). Usuário amico / senha pass é aluno e ainda não está no curso Introduction to AI2.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/login e entrar com usuário amico e senha pass]]></actions>
+        <expectedresults><![CDATA[Login realizado e página inicial exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/introduction-to-ai2]]></actions>
+        <expectedresults><![CDATA[Página do curso exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em "Add Course"]]></actions>
+        <expectedresults><![CDATA[O sistema redireciona para o perfil do usuário (/profile/amico).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Procurar a lista de cursos do perfil]]></actions>
+        <expectedresults><![CDATA[O curso Introduction to AI2 aparece na lista de cursos do usuário.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-03 - Tentar se inscrever de novo logo depois de inscrito">
+    <summary><![CDATA[Verificar que a mesma inscrição não é feita duas vezes.]]></summary>
+    <preconditions><![CDATA[Executar antes o CT-INSC-02 (amico já inscrito em Introduction to AI2).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[2]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Com amico logado, abrir http://localhost:8000/course/introduction-to-ai2]]></actions>
+        <expectedresults><![CDATA[Página do curso exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Clicar em "Add Course"]]></actions>
+        <expectedresults><![CDATA[A página do curso é exibida com o alerta "You are already registered in this course.".]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Abrir o perfil do usuário e contar quantas vezes o curso aparece]]></actions>
+        <expectedresults><![CDATA[O curso aparece uma única vez na lista.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-04 - Tentar se inscrever em curso em que o aluno já está inscrito">
+    <summary><![CDATA[Verificar o aviso para um curso em andamento em que o aluno já está inscrito.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada. amico já está inscrito em Matematicas Para Gatos (curso não concluído).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[2]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass em http://localhost:8000/login]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/matematicas-para-gatos]]></actions>
+        <expectedresults><![CDATA[Página do curso exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em "Add Course"]]></actions>
+        <expectedresults><![CDATA[Alerta "You are already registered in this course.".]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-05 - Tentar se inscrever em curso que o aluno já concluiu">
+    <summary><![CDATA[Verificar o aviso para um curso concluído.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada. amico está inscrito em AI Advanced Tips, que está marcado como concluído nos dados iniciais.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[2]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass em http://localhost:8000/login]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/ai-advanced-tips]]></actions>
+        <expectedresults><![CDATA[Página do curso exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em "Add Course"]]></actions>
+        <expectedresults><![CDATA[Alerta "You have already completed this course.".]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-06 - A mensagem de erro aparece só uma vez">
+    <summary><![CDATA[Verificar que o alerta some quando a página é recarregada.]]></summary>
+    <preconditions><![CDATA[Executar antes o CT-INSC-05 (alerta de curso concluído na tela).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[1]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Com o alerta na tela, recarregar a página (F5)]]></actions>
+        <expectedresults><![CDATA[A página do curso é exibida sem o alerta.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-07 - Tentar se inscrever em um curso que não existe">
+    <summary><![CDATA[Verificar o comportamento do sistema com um endereço de curso inválido.]]></summary>
+    <preconditions><![CDATA[Aplicação rodando. amico logado.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass em http://localhost:8000/login]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/curso-que-nao-existe/add]]></actions>
+        <expectedresults><![CDATA[O sistema mostra uma página de erro amigável (por exemplo, curso não encontrado ou 404).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-08 - A mensagem de um usuário não pode aparecer para outro">
+    <summary><![CDATA[Verificar se o aviso de erro fica guardado no servidor e aparece para quem não o causou.]]></summary>
+    <preconditions><![CDATA[Aplicação rodando. Terminal do PowerShell aberto. amico logado no navegador.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[No PowerShell, rodar: curl.exe -s -o NUL http://localhost:8000/course/introduction-to-ai/add (simula um visitante sem login que clicou em Add Course, sem abrir a página de volta)]]></actions>
+        <expectedresults><![CDATA[O comando termina sem erro.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[No navegador, com amico logado, abrir http://localhost:8000/course/introduction-to-ai]]></actions>
+        <expectedresults><![CDATA[A página do curso é exibida SEM nenhum alerta, porque o amico não clicou em nada.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-INSC-09 - Datas de início e fim exibidas na página do curso">
+    <summary><![CDATA[Verificar o formato das datas mostradas na página de informações do curso.]]></summary>
+    <preconditions><![CDATA[Aplicação rodando. O curso Introduction to AI tem início em 31/01/2019 e fim em 30/07/2019 nos dados iniciais.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[2]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/introduction-to-ai]]></actions>
+        <expectedresults><![CDATA[Página do curso exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Ler as datas de início e de fim na tabela de datas do curso]]></actions>
+        <expectedresults><![CDATA[Início 31-01-2019 e fim 30-07-2019 (formato dia-mês-ano).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+</testcases>
