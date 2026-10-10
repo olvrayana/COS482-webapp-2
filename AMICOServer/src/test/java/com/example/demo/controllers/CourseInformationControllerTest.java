@@ -236,4 +236,82 @@ class CourseInformationControllerTest {
         assertEquals(Arrays.asList(concluido, curso), cursosDoUsuario);
         verify(userRepository).save(usuario);
     }
+
+    // ---------- já inscrito ----------
+
+    @Test
+    void usuarioJaInscritoNoCurso_voltaParaAPaginaComMensagem() {
+        usuarioLogado();
+        cursosDoUsuario.add(curso);
+
+        RedirectView resposta = inscrever();
+
+        assertEquals(URL_DO_CURSO_COM_ERRO, resposta.getUrl());
+        Model pagina = paginaDoCurso();
+        assertEquals(Boolean.TRUE, pagina.asMap().get("error"));
+        assertEquals("You are already registered in this course.", pagina.asMap().get("message"));
+    }
+
+    @Test
+    void usuarioJaInscrito_cursoNaSegundaPosicaoDaLista_tambemEhEncontrado() {
+        usuarioLogado();
+        cursosDoUsuario.add(cursoComId(2L));
+        cursosDoUsuario.add(curso);
+
+        RedirectView resposta = inscrever();
+
+        assertEquals(URL_DO_CURSO_COM_ERRO, resposta.getUrl());
+        assertEquals("You are already registered in this course.", paginaDoCurso().asMap().get("message"));
+    }
+
+    @Test
+    void usuarioJaInscrito_naoSalvaNadaENaoMudaAsListas() {
+        usuarioLogado();
+        cursosDoUsuario.add(curso);
+
+        inscrever();
+
+        assertNadaFoiSalvo();
+        assertEquals(Arrays.asList(curso), cursosDoUsuario);
+        assertTrue(inscritosNoCurso.isEmpty());
+    }
+
+    @Test
+    void usuarioQueConcluiuOutroCursoMasJaEstaInscritoNeste_mostraMensagemDeInscrito() {
+        usuarioLogado();
+        cursosDoUsuario.add(curso);
+        cursosConcluidos.add(cursoComId(3L));
+
+        inscrever();
+
+        assertEquals("You are already registered in this course.", paginaDoCurso().asMap().get("message"));
+    }
+
+    // ---------- já concluiu ----------
+
+    @Test
+    void usuarioQueJaConcluiuOCurso_voltaParaAPaginaComMensagemDeConcluido() {
+        usuarioLogado();
+        // na aplicação real, um curso concluído também está na lista de inscritos
+        cursosDoUsuario.add(curso);
+        cursosConcluidos.add(curso);
+
+        RedirectView resposta = inscrever();
+
+        assertEquals(URL_DO_CURSO_COM_ERRO, resposta.getUrl());
+        Model pagina = paginaDoCurso();
+        assertEquals(Boolean.TRUE, pagina.asMap().get("error"));
+        assertEquals("You have already completed this course.", pagina.asMap().get("message"));
+    }
+
+    @Test
+    void usuarioQueJaConcluiuOCurso_naoSalvaNada() {
+        usuarioLogado();
+        cursosDoUsuario.add(curso);
+        cursosConcluidos.add(curso);
+
+        inscrever();
+
+        assertNadaFoiSalvo();
+    }
 }
