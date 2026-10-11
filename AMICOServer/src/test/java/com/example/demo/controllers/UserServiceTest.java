@@ -250,8 +250,10 @@ public class UserServiceTest {
 
 		StudyItem atividade = new StudyItem("pratica", "Exercício de Java");
 		Practices entregaUm = new Practices("Entrega 1");
+		entregaUm.setPracticeID(1);
 		entregaUm.setStudyItem(atividade);
 		Practices entregaDois = new Practices("Entrega 2");
+		entregaDois.setPracticeID(2);
 		entregaDois.setStudyItem(atividade);
 		List<Practices> entregas = new ArrayList<>(Arrays.asList(entregaUm, entregaDois));
 
