@@ -1,0 +1,24 @@
+name: Maven Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AMICOServer
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: maven
+
+      - name: Run tests
+        run: mvn test --add-opens java.base/java.lang=ALL-UNNAMED
