@@ -38,7 +38,7 @@ Total: 107 testes unitários documentados.
 | Modificar curso                             | [casos-de-teste-manuais-modify-course.md](docs/casos-de-teste-manuais-modify-course.md)     | Beatriz Farias |
 | Inscrição em curso                          | [casos-de-teste-manuais-inscricao-curso.md](docs/casos-de-teste-manuais-inscricao-curso.md) | Giulia Cadorin |
 | Cadastro, perfil e exclusão de usuário (12 casos) | [casos-de-teste-manuais-user-service.md](docs/casos-de-teste-manuais-user-service.md) | Thomas Cardoso |
-| Cadastro de novo utilizador                 | [casos-de-teste-manuais-singup.md](docs/casos-de-teste-manuais-singup.md)             | Rayana Oliveira|
+| Cadastro de novo utilizador                 | [casos-de-teste-manuais-singup.md](docs/casos-de-teste-manuais-signup.md)             | Rayana Oliveira|
 
 ### TestLink
 
@@ -51,7 +51,7 @@ Total: 107 testes unitários documentados.
 - [Saídas dos comandos curl (reproduções)](docs/evidencias/moodle/evidencias-curl.md)
 - [Prints dos casos manuais de práticas](docs/evidencias/moodle/) (CT-01 a CT-07)
 - [GIFs dos casos manuais de modificar curso](manual-test-results/modify-course/) (CT-MOD-01 a CT-MOD-10)
-- [GIFs dos casos manuais de cadastro de novo utilizador](manual-test-results/singup/)(CT-SING-01 a CT-SING-13)
+- [GIFs dos casos manuais de cadastro de novo utilizador](manual-test-results/signup/)(CT-SING-01 a CT-SING-13)
 
 ### Issues (bug tracker)
 
