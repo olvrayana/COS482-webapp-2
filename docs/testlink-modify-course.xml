@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcases>
+  <testcase name="CT-MOD-01 - Visitante sem login tenta abrir a página de admin">
+    <summary><![CDATA[Verificar que quem não está logado não acessa a administração de cursos.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada. Nenhum usuário logado (use uma janela anônima).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[O sistema redireciona para http://localhost:8000/login.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Conferir a página exibida]]></actions>
+        <expectedresults><![CDATA[A tabela de cursos com os botões Save e Delete não aparece.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-02 - Aluno comum tenta abrir a página de admin">
+    <summary><![CDATA[Verificar que um aluno sem perfil de admin não acessa a administração de cursos.]]></summary>
+    <preconditions><![CDATA[Dados originais.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar em http://localhost:8000/login com amico / pass]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[O sistema mostra a página de acesso negado (403).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Conferir a página exibida]]></actions>
+        <expectedresults><![CDATA[A tabela de cursos com os botões Save e Delete não aparece.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-03 - Salvar alterando os quatro campos">
+    <summary><![CDATA[Verificar o fluxo principal de edição com todos os campos preenchidos.]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Na linha de Introduction to AI2, trocar Nome para Curso Editado, Idioma para Portuguese, Tipo para Teste e Descrição para Descricao nova]]></actions>
+        <expectedresults><![CDATA[Os campos mostram os novos valores.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em **Save**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a linha do curso]]></actions>
+        <expectedresults><![CDATA[Nome Curso Editado, idioma Portuguese, tipo Teste e descrição Descricao nova continuam gravados.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-04 - Salvar com os quatro campos vazios">
+    <summary><![CDATA[Verificar que campos vazios não apagam os dados do curso.]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Na linha de AI Advanced Tips2, apagar Nome, Idioma, Tipo e Descrição]]></actions>
+        <expectedresults><![CDATA[Os quatro campos ficam vazios.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em **Save**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a linha do curso]]></actions>
+        <expectedresults><![CDATA[Nome, idioma, tipo e descrição continuam com os valores originais.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-05 - Salvar alterando só o nome">
+    <summary><![CDATA[Verificar que só o campo preenchido é alterado.]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Na linha de AI Advanced Tips2, trocar Nome para Nome Parcial e apagar Idioma, Tipo e Descrição]]></actions>
+        <expectedresults><![CDATA[Só o nome tem valor.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em **Save**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a linha do curso]]></actions>
+        <expectedresults><![CDATA[O nome é Nome Parcial; idioma English, tipo Computer Science e a descrição Learn all the most advanced stuff related to IA continuam iguais.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-06 - Salvar alterando só a descrição">
+    <summary><![CDATA[Verificar o ramo da descrição preenchida sozinha.]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Na linha de AI Advanced Tips2, apagar Nome, Idioma e Tipo e trocar a Descrição para So a descricao]]></actions>
+        <expectedresults><![CDATA[Só a descrição tem valor.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em **Save**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a linha do curso]]></actions>
+        <expectedresults><![CDATA[Nome, idioma e tipo continuam originais; a descrição é So a descricao.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-07 - Salvar alterando só o idioma">
+    <summary><![CDATA[Verificar o ramo do idioma preenchido sozinho.]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Na linha de AI Advanced Tips2, apagar Nome, Tipo e Descrição e trocar o Idioma para Frances]]></actions>
+        <expectedresults><![CDATA[Só o idioma tem valor.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em **Save**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a linha do curso]]></actions>
+        <expectedresults><![CDATA[Nome, tipo e descrição continuam originais; o idioma é Frances.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-08 - Salvar alterando só o tipo">
+    <summary><![CDATA[Verificar o ramo do tipo preenchido sozinho.]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Na linha de AI Advanced Tips2, apagar Nome, Idioma e Descrição e trocar o Tipo para Arte]]></actions>
+        <expectedresults><![CDATA[Só o tipo tem valor.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em **Save**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a linha do curso]]></actions>
+        <expectedresults><![CDATA[Nome, idioma e descrição continuam originais; o tipo é Arte.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-09 - Excluir um curso com skills e alunos inscritos">
+    <summary><![CDATA[Verificar a exclusão de um curso com vínculos, quando os três laços de limpeza executam.]]></summary>
+    <preconditions><![CDATA[Dados originais. Introduction to AI tem 5 skills e alunos inscritos (amico está inscrito).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass, abrir /profile/amico e anotar que Introduction to AI aparece nos cursos]]></actions>
+        <expectedresults><![CDATA[Curso listado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Sair, entrar como admin / pass e abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Introduction to AI aparece na tabela.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Na linha de Introduction to AI, clicar em **Delete**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/ sem erro.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a tabela]]></actions>
+        <expectedresults><![CDATA[Introduction to AI não aparece mais.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[5]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass e abrir o perfil]]></actions>
+        <expectedresults><![CDATA[Introduction to AI não aparece mais nos cursos do aluno.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[6]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/introduction-to-ai]]></actions>
+        <expectedresults><![CDATA[Página de curso não encontrado (ou erro 404 amigável).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-MOD-10 - Excluir um curso sem nenhum vínculo">
+    <summary><![CDATA[Verificar a exclusão quando as listas de matérias, alunos e skills estão vazias (os laços não iteram).]]></summary>
+    <preconditions><![CDATA[Dados originais. Logado como admin / pass.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/course/ai-advanced-tips2 e confirmar que o curso não tem matérias nem alunos; se tiver, usar outro curso sem vínculos, por exemplo um criado em **Create Course** na própria página /admin]]></actions>
+        <expectedresults><![CDATA[Curso sem vínculos confirmado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/admin]]></actions>
+        <expectedresults><![CDATA[Tabela de cursos exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Na linha desse curso, clicar em **Delete**]]></actions>
+        <expectedresults><![CDATA[A página volta para /admin/ sem erro.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Recarregar a página e conferir a tabela]]></actions>
+        <expectedresults><![CDATA[O curso não aparece mais.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+</testcases>
