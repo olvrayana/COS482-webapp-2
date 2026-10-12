@@ -1,3 +1,75 @@
+# COS482 - Testes de Software (Entrega 1)
+
+Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pela disciplina COS482 (2026.2) para a aplicação dos conceitos de qualidade e teste de software. O conteúdo original do projeto está preservado abaixo da seção [Projeto original](#projeto-original).
+
+## Grupo
+
+| Integrante      | GitHub                                              | Responsabilidade (Entrega 1)                                                                     |
+| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Gabriella Lima  | [gabilima2004](https://github.com/gabilima2004)     | Testes unitários do `MoodleController`; caso de teste manual da submissão e correção de práticas |
+| Beatriz Farias  | [beatriz-farias](https://github.com/beatriz-farias) | Testes unitários do `AdminController`; caso de teste manual de modificar curso                   |
+| Rayana Oliveira | [olvrayana](https://github.com/olvrayana)           | Testes unitários do `SignUpController`; caso de teste manual da funcionalidade Z (a definir)     |
+| Thomas Cardoso  | [thomascard](https://github.com/thomascard)         | Testes unitários do `UserService`; caso de teste manual da funcionalidade W (a definir)          |
+| Giulia Cadorin  | [giuliacadorin](https://github.com/giuliacadorin)   | Testes unitários do `CourseInformationController`; caso de teste manual de inscrição em curso    |
+
+## Artefatos da Entrega 1
+
+### Plano de Teste
+
+- [Plano de Teste (IEEE 829)](docs/plano-de-testes-cos482-webapp2.md) - escopo, abordagem, critérios, cronograma e responsabilidades
+
+### Testes unitários (JUnit 5 + Mockito)
+
+| Classe sob teste              | Arquivo de teste                                                                                                                                | Responsável     |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `MoodleController`            | [MoodleControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/MoodleControllerTest.java) (29 testes)                       | Gabriella Lima  |
+| `AdminController`             | [AdminControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/AdminControllerTest.java) (21 testes)                         | Beatriz Farias  |
+| `SignUpController`            | [SignUpControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/SignUpControllerTest.java) (14 testes)                       | Rayana Oliveira |
+| `UserService`                 | [UserServiceTest.java](AMICOServer/src/test/java/com/example/demo/controllers/UserServiceTest.java) (14 testes)                                 | Thomas Cardoso  |
+| `CourseInformationController` | [CourseInformationControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/CourseInformationControllerTest.java) (18 testes) | Giulia Cadorin  |
+
+Total: 96 testes unitários, todos executando sem falhas.
+
+### Casos de teste manuais
+
+| Funcionalidade                              | Documento                                                                                   | Responsável    |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------- |
+| Submissão e correção de práticas (13 casos) | [casos-de-teste-manuais-praticas-moodle.md](docs/casos-de-teste-manuais-praticas-moodle.md) | Gabriella Lima |
+| Modificar curso                             | [casos-de-teste-manuais-modify-course.md](docs/casos-de-teste-manuais-modify-course.md)     | Beatriz Farias |
+| Inscrição em curso                          | [casos-de-teste-manuais-inscricao-curso.md](docs/casos-de-teste-manuais-inscricao-curso.md) | Giulia Cadorin |
+
+### TestLink
+
+- [Inscrição em curso (export XML)](docs/testlink-inscricao-curso.xml) - Giulia Cadorin
+- [Modificar curso (export XML)](docs/testlink-modify-course.xml) - Beatriz Farias
+
+### Evidências
+
+- [Saídas dos comandos curl (reproduções)](docs/evidencias/moodle/evidencias-curl.md)
+- [Prints dos casos manuais de práticas](docs/evidencias/moodle/) (CT-01 a CT-07)
+- [GIFs dos casos manuais de modificar curso](manual-test-results/modify-course/) (CT-MOD-01 a CT-MOD-10)
+
+### Issues (bug tracker)
+
+Os defeitos encontrados nos testes estão reportados nas issues do repositório:
+
+- [Lista de issues](https://github.com/olvrayana/COS482-webapp-2/issues)
+- Defeitos do `MoodleController`: 3 NPEs (2 reproduzidos em execução com HTTP 500, 1 fragilidade latente), nota sem validação de faixa, prática entregue com arquivo vazio, submissão corrigida alterável pelo aluno, erro 400 sem mensagem amigável, `count()` usado como ID (reproduzido: HTTP 500 com `EntityNotFoundException`), download bloqueado com 200 vazio
+- [Exemplo documentado](docs/issue-course-not-found-500.md): erro 500 com curso inexistente
+
+### Como executar os testes
+
+```bash
+cd AMICOServer
+mvn test
+```
+
+Requisito: JDK 8 (o projeto é Java 1.8; versões mais novas quebram o Mockito antigo).
+
+---
+
+# Projeto original
+
 # AMICOurses
 
 ## VIDEO
@@ -14,13 +86,13 @@ In this repository we will place our web application, which is aimed to provide 
 
 ### Entities
 
-* User
-    * Student
-    * Teacher
-* Subject
-* Message
-* Course
-* Study item
+- User
+  - Student
+  - Teacher
+- Subject
+- Message
+- Course
+- Study item
 
 ---
 
@@ -28,21 +100,21 @@ In this repository we will place our web application, which is aimed to provide 
 
 The application will be able to show some information in graphics, like:
 
-* Students' califications (with filters individual student or a group of students).
-* Time series charts to compare students' progress with the average progress of the full group
+- Students' califications (with filters individual student or a group of students).
+- Time series charts to compare students' progress with the average progress of the full group
 
 ---
 
 ### Advanced funcionality
 
-* Restrictions in order to enter in a course
-* Recommend a course based on previous courses done by the student
+- Restrictions in order to enter in a course
+- Recommend a course based on previous courses done by the student
 
 ---
 
 ### Advanced Technology
 
-* Generate PDF with useful information (students' califications, final certificates)...
+- Generate PDF with useful information (students' califications, final certificates)...
 
 ---
 
@@ -50,22 +122,21 @@ The application will be able to show some information in graphics, like:
 
 AMICO Group:
 
-
-* **A**ntonio Alcojor Patilla
-    * Github: https://github.com/analpa1997
-    * Mail: a.alcojor@alumnos.urjc.es
-* **M**iguel Esteban Illescas
-    * Github: https://github.com/mesteban96
-    * Mail: m.estebani@alumnos.urjc.es
-* **I**ván Motos Montalbán
-    * Github: https://github.com/ivanchi88
-    * Mail: i.motos@alumnos.urjc.es
-* **C**arlos Gil Herranz
-    * Github: https://github.com/Carlosghms
-    * Mail: c.gilh@alumnos.urjc.es
-* **O**leh Hrinchenko
-    * Github: https://github.com/oleh97
-    * Mail: o.hrinchenko@alumnos.urjc.es
+- **A**ntonio Alcojor Patilla
+  - Github: https://github.com/analpa1997
+  - Mail: a.alcojor@alumnos.urjc.es
+- **M**iguel Esteban Illescas
+  - Github: https://github.com/mesteban96
+  - Mail: m.estebani@alumnos.urjc.es
+- **I**ván Motos Montalbán
+  - Github: https://github.com/ivanchi88
+  - Mail: i.motos@alumnos.urjc.es
+- **C**arlos Gil Herranz
+  - Github: https://github.com/Carlosghms
+  - Mail: c.gilh@alumnos.urjc.es
+- **O**leh Hrinchenko
+  - Github: https://github.com/oleh97
+  - Mail: o.hrinchenko@alumnos.urjc.es
 
 ---
 
@@ -174,7 +245,6 @@ And last, but not least, the user can enter into the forum, where he can interac
 
 ![Admin page 2](https://github.com/analpa1997/AMICOurses/blob/master/Readme%20ScreenShots/Admin%20page2.png)
 
-
 #### Moodle page
 
 ![Moodle page](https://github.com/analpa1997/AMICOurses/blob/master/Readme%20ScreenShots/Moodle%20page.png)
@@ -205,6 +275,7 @@ We created a Maven project and we imported in pom.xml all the dependencies we ne
 ![Component Diagram List](https://i.imgur.com/Tlzoau6.png)
 
 ## Docker
+
 To deploy the application in docker it is necessary:
 
 Create the image of the web application - from the docker directory execute create_image.bat
@@ -218,30 +289,30 @@ to stop docker-compose using docker-compose stop from the docker directory.
 ## Phase V
 
 ### Docker
-Docker Community Edition (CE) for windows required 
+
+Docker Community Edition (CE) for windows required
 Docker containers require the windows local drives to be shared
 
 The create_image.ps1 (powershell script):
- 1. builds the angular client files and publish them to the HTTP erver 
- 2. generates the jar files
- 3. generates the docker image
- 
-The publish_image.bat  uploads the docker image to the docker hub
+
+1.  builds the angular client files and publish them to the HTTP erver
+2.  generates the jar files
+3.  generates the docker image
+
+The publish_image.bat uploads the docker image to the docker hub
 The docker-compose.yml file creates the MySQL and the application containers
 
 The create_image.bat file execute the create_image.ps1 script in a windows CMD screen
 
 To start the application:
+
 1. open a CDM windows
 2. go to docker directory and execute:
-2.1. .\create_image.bat
-2.2. docker-compose up
+   2.1. .\create_image.bat
+   2.2. docker-compose up
 
-To stop the application execute in docker directory docker-compose stop 
+To stop the application execute in docker directory docker-compose stop
 
 ### Component Diagram
 
 ![Component Diagram Phase V](https://raw.githubusercontent.com/analpa1997/AMICOurses/master/Readme%20ScreenShots/Component%20Diagram%20Phase%205.png)
-
-
-

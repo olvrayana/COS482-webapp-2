@@ -16,11 +16,11 @@ Conforme as exigências do trabalho:
 
 **Entrega 1:**
 * **Testes Unitários:** Pelo menos uma classe de alta complexidade por integrante. Cada classe sob teste terá **complexidade ciclomática mínima de 10** (desvios, laços, estruturas de controle).
-  * *Classe 1:* MoodleController (método `allCourses`, CC 13) - Responsável: [Integrante A]
-  * *Classe 2:* AdminController (método `modifyCourses`, CC 13) - Responsável: Beatriz Farias
+  * *Classe 1:* MoodleController (método `allCourses`, CC 13) - Responsável: Gabriella Lima
+  * *Classe 2:* AdminController (método `modifyCourse`, CC 13) - Responsável: Beatriz Farias
   * *Classe 3:* SignUpController (método `registered`, CC 16) - Responsável: Rayana Oliveira
-  * *Classe 4:* UserService (método `updateuser`, CC 28) - Responsável: Thomas Cardoso
-  * *Classe 5:* CourseInformationController (método `addcoursetouser`, CC 11) - Responsável: Giulia Cadorin
+  * *Classe 4:* UserService (método `updateUser`, CC 28) - Responsável: Thomas Cardoso
+  * *Classe 5:* CourseInformationController (método `addCourseToUser`, CC 11) - Responsável: Giulia Cadorin
 * **Testes Manuais:** Pelo menos uma funcionalidade principal por integrante do grupo.
 
 **Entrega 2:**
@@ -33,21 +33,21 @@ Conforme as exigências do trabalho:
 
 ## 6. Abordagem (Approach)
 A estratégia abrangerá:
-1. **Testes Manuais:** Pelo menos um cenário completo modelado e executado no **TestLink** na Entrega 1.
-2. **Testes Unitários e Mocking:** Desenvolvimento de testes na linguagem do projeto. Na Entrega 2, uso de ferramentas de Mocking para isolar dependências.
+1. **Testes Manuais:** Pelo menos um cenário completo modelado e executado no **TestLink** na Entrega 1. *Status: dois cenários já cadastrados e executados (inscrição em curso, de Giulia, e modificar curso, de Beatriz), com exports XML em `docs/`.*
+2. **Testes Unitários e Mocking:** Desenvolvimento de testes na linguagem do projeto. Na Entrega 2, uso de ferramentas de Mocking para isolar dependências. *Status: 5 classes de teste implementadas (JUnit 5 + Mockito, com repositórios e services mockados) - 116 testes no total.*
 3. **Testes de Integração e Sistema:** Validação do fluxo de ponta a ponta na Entrega 2 usando Selenium (ou equivalente para a linguagem).
 4. **Técnicas e Cobertura (Entrega 2):**
    * *Funcional:* Testes baseados em especificação.
    * *Estrutural:* Alcançar ao menos **80% de cobertura todas-arestas** na classe de alta complexidade de cada integrante.
    * *Baseada em Defeitos:* Alcançar ao menos **80% de escore de mutação** nas mesmas classes.
 5. **Qualidade e Inspeção (Entrega 2):** Avaliação de atributos ISO/IEC 25010 e uso de SonarQube para inspeção de código (resolvendo problemas de pelo menos uma classe por integrante).
-6. **Gestão de Defeitos:** Bugs encontrados serão geridos no **GitHub Issues**.
+6. **Gestão de Defeitos:** Bugs encontrados serão geridos no **GitHub Issues**. *Status: 9 defeitos do MoodleController documentados (3 NPEs reproduzidos em execução com HTTP 500, 4 de validação de entrada encontrados nos casos manuais via curl, 2 de integridade/semântica HTTP), além dos defeitos das demais classes.*
 
 ## 7. Critérios de aprovação/reprovação do item (Item pass/fail criteria)
 * 100% dos testes devem executar sem falhas na esteira CI/ambiente de testes.
 * Classes selecionadas para teste unitário devem comprovar complexidade ciclomática >= 10.
 * Critérios de cobertura da Entrega 2 (80% arestas, 80% mutação) devem ser atingidos nas classes foco.
-* Links de artefatos presentes no `../../../../../Downloads/README.md` e colaboração individual verificável no GitHub/Google Docs.
+* Links de artefatos presentes no `README.md` do repositório e colaboração individual verificável no GitHub/Google Docs.
 
 ## 8. Critérios de suspensão e requisitos de retomada (Suspension criteria and resumption requirements)
 * **Suspensão:** Falhas críticas que impeçam o build da aplicação ou a indisponibilidade do ambiente de testes (ex: SonarQube offline).
@@ -75,11 +75,11 @@ A estratégia abrangerá:
 
 | Integrante | Atribuições e Responsabilidades |
 | :--- | :--- |
-| Integrante A ([Nome]) | Teste unitário da classe MoodleController; Teste manual funcionalidade X; 1 Teste E2E (Selenium). |
-| Beatriz Farias | Teste unitário da classe AdminController; Teste manual funcionalidade Y; 1 Teste E2E (Selenium). |
+| Gabriella Lima | Teste unitário da classe MoodleController; Teste manual da funcionalidade "submissão e correção de práticas" (13 casos, com evidências); 1 Teste E2E (Selenium). |
+| Beatriz Farias | Teste unitário da classe AdminController; Teste manual da funcionalidade "modificar curso" (TestLink: `docs/testlink-modify-course.xml`); 1 Teste E2E (Selenium). |
 | Rayana Oliveira | Teste unitário da classe SignUpController; Teste manual funcionalidade Z; 1 Teste E2E (Selenium). |
 | Thomas Cardoso | Teste unitário da classe UserService; Teste manual funcionalidade W; 1 Teste E2E (Selenium). |
-| Giulia Cadorin | Teste unitário da classe CourseInformationController; Teste manual da funcionalidade ”inscrição em curso”; 1 Teste E2E (Selenium). |
+| Giulia Cadorin | Teste unitário da classe CourseInformationController; Teste manual da funcionalidade "inscrição em curso" (TestLink: `docs/testlink-inscricao-curso.xml`); 1 Teste E2E (Selenium). |
 
 ## 13. Necessidades de equipe e treinamento (Staffing and training needs)
 Ter domínio do ecossistema (JUnit, Mockito, JaCoCo, PIT e SonarQube). Caso não tenha, a equipe assume a responsabilidade por encontrar, configurar e validar as ferramentas equivalentes para análise estática, mocking, cobertura, mutação e inspeção (SonarQube) para a linguagem adotada, conforme as regras da disciplina.
@@ -96,7 +96,7 @@ Ter domínio do ecossistema (JUnit, Mockito, JaCoCo, PIT e SonarQube). Caso não
 | :--- | :--- |
 | Dificuldade de configurar framework de mutação. | Procurar documentação de ferramentas compatíveis cedo no ciclo (ex: PIT para Java) e pedir apoio antecipado. |
 | Um membro da equipe não realizar os commits necessários, afetando seu AP e o trabalho. | Gestão de tarefas transparente e comunicação via grupo; o histórico do GitHub e Docs isolará as contribuições. |
-| O método updateuser da classe UserService tem complexidade 28, o que dificultará a criação de testes e mutantes. | Isolar os comportamentos desse método e tentar cobrir os fluxos principais (Happy Paths) logo no início da Entrega 1. |
+| O método `updateUser` da classe UserService tem complexidade 28, o que dificultará a criação de testes e mutantes. | Isolar os comportamentos desse método e tentar cobrir os fluxos principais (Happy Paths) logo no início da Entrega 1. |
 
 ## 16. Aprovações (Approvals)
 * Professor (Validação prévia de complexidade/escopo).
