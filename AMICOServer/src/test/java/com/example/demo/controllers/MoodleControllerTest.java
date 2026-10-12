@@ -1,9 +1,10 @@
 package com.example.demo.controllers;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
@@ -54,10 +55,14 @@ import com.example.demo.user.UserRepository;
  * itens de estudo, módulos, práticas, notas e downloads).
  * Repositórios e services mockados; a lógica testada é a do controller real.
  *
- * Bugs conhecidos documentados em issues:
- *  - allCourses com curso inexistente -> NullPointerException
- *  - allCourses com disciplina inexistente -> NullPointerException
- *  - uploadStudyItem com usuário anônimo -> NullPointerException
+ * Defeitos encontrados (issues no GitHub):
+ *  - allCourses com curso inexistente -> NullPointerException (reproduzido:
+ *    HTTP 500 em execução)
+ *  - allCourses com disciplina inexistente -> NullPointerException (reproduzido:
+ *    HTTP 500 em execução)
+ *  - uploadStudyItem sem verificação de usuário nulo -> fragilidade latente
+ *    (a segurança do Spring intercepta anônimos em execução; o NPE só ocorre
+ *    se a configuração mudar)
  */
 public class MoodleControllerTest {
 
@@ -232,33 +237,26 @@ public class MoodleControllerTest {
 	}
 
 	// BUG conhecido: curso inexistente -> NPE em course.getInscribedUsers().
-	// Documentado na issue do MoodleController.
+	// Reproduzido em execução (HTTP 500). Issue no GitHub (MoodleController).
 	@Test
 	public void allCourses_unknownCourseThrowsNullPointerException() {
 		when(sessionUserComponent.getLoggedUser()).thenReturn(student);
 		when(courseRepository.findByInternalName("inexistente")).thenReturn(null);
 
-		try {
-			controller.allCourses(model, null, "inexistente", SUBJECT_NAME, 0);
-			throw new AssertionError("Era esperado um NullPointerException");
-		} catch (NullPointerException expected) {
-			// comportamento atual (bug)
-		}
+		assertThrows(NullPointerException.class,
+				() -> controller.allCourses(model, null, "inexistente", SUBJECT_NAME, 0));
 	}
 
 	// BUG conhecido: disciplina inexistente -> NPE em subject.getInternalName()
-	// depois do bloco if (subject != null). Documentado na issue do MoodleController.
+	// depois do bloco if (subject != null). Reproduzido em execução (HTTP 500).
+	// Issue no GitHub (MoodleController).
 	@Test
 	public void allCourses_unknownSubjectThrowsNullPointerException() {
 		course.getInscribedUsers().add(student);
 		when(sessionUserComponent.getLoggedUser()).thenReturn(student);
 
-		try {
-			controller.allCourses(model, null, COURSE_NAME, "disciplina-inexistente", 0);
-			throw new AssertionError("Era esperado um NullPointerException");
-		} catch (NullPointerException expected) {
-			// comportamento atual (bug)
-		}
+		assertThrows(NullPointerException.class,
+				() -> controller.allCourses(model, null, COURSE_NAME, "disciplina-inexistente", 0));
 	}
 
 	// ---- moduleAction: adicionar/remover módulo ----
@@ -366,20 +364,18 @@ public class MoodleControllerTest {
 				org.mockito.Matchers.anyString(), org.mockito.Matchers.anyString());
 	}
 
-	// BUG conhecido: usuário anônimo -> NPE em user.isStudent() (os outros métodos
-	// verificam user != null, este não). Documentado na issue do MoodleController.
+	// Fragilidade latente: usuário anônimo -> NPE em user.isStudent() (os outros
+	// métodos verificam user != null, este não). Em execução a segurança do Spring
+	// intercepta anônimos (302 -> /login); o NPE só ocorre se a configuração mudar.
+	// Issue no GitHub (MoodleController).
 	@Test
 	public void uploadStudyItem_anonymousUserThrowsNullPointerException() throws Exception {
 		when(sessionUserComponent.getLoggedUser()).thenReturn(null);
 		MockMultipartFile arquivo = new MockMultipartFile("itemFile", "aula2.pdf", "application/pdf",
 				"conteudo".getBytes());
 
-		try {
-			chamarPrivado("uploadStudyItem", COURSE_NAME, SUBJECT_NAME, 2, "Aula 2", "pdf", arquivo);
-			throw new AssertionError("Era esperado um NullPointerException");
-		} catch (NullPointerException expected) {
-			// comportamento atual (bug)
-		}
+		assertThrows(NullPointerException.class,
+				() -> chamarPrivado("uploadStudyItem", COURSE_NAME, SUBJECT_NAME, 2, "Aula 2", "pdf", arquivo));
 	}
 
 	// ---- getStudyItemFile: download de item ou prática ----
