@@ -38,7 +38,7 @@ Total: 107 testes unitários documentados.
 | Modificar curso                             | [casos-de-teste-manuais-modify-course.md](docs/casos-de-teste-manuais-modify-course.md)     | Beatriz Farias |
 | Inscrição em curso                          | [casos-de-teste-manuais-inscricao-curso.md](docs/casos-de-teste-manuais-inscricao-curso.md) | Giulia Cadorin |
 | Cadastro, perfil e exclusão de usuário (12 casos) | [casos-de-teste-manuais-user-service.md](docs/casos-de-teste-manuais-user-service.md) | Thomas Cardoso |
-| Cadastro de novo utilizador                 | [casos-de-teste-manuais-singup.md](docs/casos-de-teste-manuais-singup-curso.md)             | Rayana Oliveira|
+| Cadastro de novo utilizador                 | [casos-de-teste-manuais-singup.md](docs/casos-de-teste-manuais-singup.md)             | Rayana Oliveira|
 
 ### TestLink
 
