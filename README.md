@@ -25,10 +25,10 @@ Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pel
 | `MoodleController`            | [MoodleControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/MoodleControllerTest.java) (29 testes)                       | Gabriella Lima  |
 | `AdminController`             | [AdminControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/AdminControllerTest.java) (21 testes)                         | Beatriz Farias  |
 | `SignUpController`            | [SignUpControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/SignUpControllerTest.java) (14 testes)                       | Rayana Oliveira |
-| `UserService`                 | [UserServiceTest.java](AMICOServer/src/test/java/com/example/demo/controllers/UserServiceTest.java) (14 testes)                                 | Thomas Cardoso  |
+| `UserService`                 | [UserServiceTest.java](AMICOServer/src/test/java/com/example/demo/controllers/UserServiceTest.java) (25 testes)                                 | Thomas Cardoso  |
 | `CourseInformationController` | [CourseInformationControllerTest.java](AMICOServer/src/test/java/com/example/demo/controllers/CourseInformationControllerTest.java) (18 testes) | Giulia Cadorin  |
 
-Total: 96 testes unitários, todos executando sem falhas.
+Total: 107 testes unitários documentados.
 
 ### Casos de teste manuais
 
@@ -37,11 +37,13 @@ Total: 96 testes unitários, todos executando sem falhas.
 | Submissão e correção de práticas (13 casos) | [casos-de-teste-manuais-praticas-moodle.md](docs/casos-de-teste-manuais-praticas-moodle.md) | Gabriella Lima |
 | Modificar curso                             | [casos-de-teste-manuais-modify-course.md](docs/casos-de-teste-manuais-modify-course.md)     | Beatriz Farias |
 | Inscrição em curso                          | [casos-de-teste-manuais-inscricao-curso.md](docs/casos-de-teste-manuais-inscricao-curso.md) | Giulia Cadorin |
+| Cadastro, perfil e exclusão de usuário (12 casos) | [casos-de-teste-manuais-user-service.md](docs/casos-de-teste-manuais-user-service.md) | Thomas Cardoso |
 
 ### TestLink
 
 - [Inscrição em curso (export XML)](docs/testlink-inscricao-curso.xml) - Giulia Cadorin
 - [Modificar curso (export XML)](docs/testlink-modify-course.xml) - Beatriz Farias
+- [Cadastro de usuário (export XML, CT-USR-01)](docs/testlink-user-service.xml) - Thomas Cardoso
 
 ### Evidências
 

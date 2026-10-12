@@ -8,9 +8,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.course.Course;
 import com.example.demo.practices.Practices;
@@ -131,6 +134,25 @@ public class UserServiceTest {
 	}
 
 	@Test
+	public void checkUser_acceptsUsernameAndPasswordLengthBoundaries() {
+		String[] nomes = { "helen", "professorbrasil" };
+		String[] senhas = { "senha123", "senha123456789" };
+		String[] emails = { "helen@exemplo.com.br", "professor@exemplo.com.br" };
+
+		for (int i = 0; i < nomes.length; i++) {
+			when(userRepository.findByUsername(nomes[i])).thenReturn(null);
+			when(userRepository.findByUserMail(emails[i])).thenReturn(null);
+
+			User criado = userService.checkUser(nomes[i], senhas[i], senhas[i], emails[i], false);
+
+			assertNotNull(criado);
+			assertEquals(nomes[i], criado.getUsername());
+		}
+
+		verify(userRepository, times(2)).save(any(User.class));
+	}
+
+	@Test
 	public void checkUser_rejectsInvalidCredentialsWithoutRepositoryAccess() {
 		assertNull(userService.checkUser("bad.name", PASSWORD, PASSWORD, EMAIL, false));
 		assertNull(userService.checkUser(USERNAME, "short", "short", EMAIL, false));
@@ -232,6 +254,142 @@ public class UserServiceTest {
 		assertNull(userService.updateUser("usuario_inexistente", new User()));
 
 		verify(userRepository, never()).save(any(User.class));
+	}
+
+	@Test
+	public void updateUser_keepsUsernameWhenItIsAlreadyInUse() {
+		User outroUsuario = new User("heleno_prof", "senha123", "heleno@exemplo.com.br", true);
+		User alteracoes = new User();
+		alteracoes.setUsername("heleno_prof");
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.findByUsername("heleno_prof")).thenReturn(outroUsuario);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", alteracoes);
+
+		assertEquals("usuario_antigo", atualizado.getUsername());
+		assertEquals("usuario_antigo", atualizado.getInternalName());
+		verify(userRepository).save(existingUser);
+	}
+
+	@Test
+	public void updateUser_preservesProfileWhenAllChangesAreNull() {
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", new User());
+
+		assertEquals("usuario_antigo", atualizado.getUsername());
+		assertEquals("antigo@exemplo.com.br", atualizado.getUserMail());
+		assertEquals("Ana", atualizado.getUserFirstName());
+		assertEquals("Oliveira", atualizado.getUserLastName());
+		assertEquals("Rua das Palmeiras, 45", atualizado.getUserAddress());
+		assertEquals("Curitiba", atualizado.getCity());
+		assertEquals("Brasil", atualizado.getCountry());
+		assertEquals("Leitura", atualizado.getInterests());
+		assertEquals("foto-perfil-antiga.jpg", atualizado.getUrlProfileImage());
+		verify(userRepository).save(existingUser);
+	}
+
+	@Test
+	public void updateUser_acceptsFirstAndLastNamesAtMinimumLength() {
+		User alteracoes = new User();
+		alteracoes.setUserFirstName("Ana");
+		alteracoes.setUserLastName("Rey");
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", alteracoes);
+
+		assertEquals("Ana", atualizado.getUserFirstName());
+		assertEquals("Rey", atualizado.getUserLastName());
+	}
+
+	@Test
+	public void updateUser_rejectsFirstNameAtMaximumLength() {
+		User alteracoes = new User();
+		alteracoes.setUserFirstName(stringOfLength(20));
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", alteracoes);
+
+		assertEquals("Ana", atualizado.getUserFirstName());
+	}
+
+	@Test
+	public void updateUser_acceptsAddressAtMaximumLength() {
+		String endereco = stringOfLength(34);
+		User alteracoes = new User();
+		alteracoes.setUserAddress(endereco);
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", alteracoes);
+
+		assertEquals(endereco, atualizado.getUserAddress());
+	}
+
+	@Test
+	public void updateUser_acceptsCityAndCountryAtMaximumLength() {
+		String cidade = stringOfLength(19);
+		String pais = stringOfLength(19);
+		User alteracoes = new User();
+		alteracoes.setCity(cidade);
+		alteracoes.setCountry(pais);
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", alteracoes);
+
+		assertEquals(cidade, atualizado.getCity());
+		assertEquals(pais, atualizado.getCountry());
+	}
+
+	@Test
+	public void updateUser_acceptsInterestsAndImageUrlJustBelowTheirLimits() {
+		String interesses = stringOfLength(49);
+		String urlImagem = stringOfLength(79);
+		User alteracoes = new User();
+		alteracoes.setInterests(interesses);
+		alteracoes.setUrlProfileImage(urlImagem);
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+		User atualizado = userService.updateUser("usuario_antigo", alteracoes);
+
+		assertEquals(interesses, atualizado.getInterests());
+		assertEquals(urlImagem, atualizado.getUrlProfileImage());
+	}
+
+	@Test
+	public void saveImg_returnsNullWhenFileIsNull() {
+		assertNull(userService.saveImg(null, existingUser));
+
+		verifyZeroInteractions(userRepository);
+	}
+
+	@Test
+	public void saveImg_returnsNullWhenFileIsEmpty() {
+		MultipartFile arquivo = mock(MultipartFile.class);
+		when(arquivo.isEmpty()).thenReturn(true);
+
+		assertNull(userService.saveImg(arquivo, existingUser));
+
+		verifyZeroInteractions(userRepository);
+	}
+
+	@Test
+	public void deleteUser_deletesUserWithoutCoursesOrPractices() {
+		when(userRepository.findByInternalName("usuario_antigo")).thenReturn(existingUser);
+		when(practicesRepository.findByOwner(existingUser)).thenReturn(new ArrayList<Practices>());
+
+		User removido = userService.deleteUser("usuario_antigo");
+
+		assertEquals(existingUser, removido);
+		verify(practicesRepository).findByOwner(existingUser);
+		verify(userRepository).delete(existingUser);
+		verifyZeroInteractions(practicesService);
 	}
 
 	@Test
