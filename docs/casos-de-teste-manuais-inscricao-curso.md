@@ -120,16 +120,18 @@ Usuários dos dados iniciais usados aqui: **amico** / **pass** (aluno inscrito n
 
 ## Registro de execução
 
-Preencher ao executar. Em caso de falha, anexar print e abrir uma issue no GitHub.
+Execução feita manualmente em 11/10/2026, no navegador, com a aplicação local (`mvn spring-boot:run`, JDK 8, http://localhost:8000). Em caso de falha, o print está anexado e há uma issue no GitHub.
 
-| Caso | Data | Executor | Resultado obtido | Status (Passou/Falhou) | Evidência (print) | Issue |
+**Resumo:** 9 casos executados, 6 passaram e 3 falharam (CT-INSC-07, CT-INSC-08 e CT-INSC-09).
+
+| Caso | Data | Executor | Resultado obtido | Status (Passou/Falhou) | Issue |
 |---|---|---|---|---|---|---|
-| CT-INSC-01 |  |  |  |  |  |  |
-| CT-INSC-02 |  |  |  |  |  |  |
-| CT-INSC-03 |  |  |  |  |  |  |
-| CT-INSC-04 |  |  |  |  |  |  |
-| CT-INSC-05 |  |  |  |  |  |  |
-| CT-INSC-06 |  |  |  |  |  |  |
-| CT-INSC-07 |  |  |  |  |  |  |
-| CT-INSC-08 |  |  |  |  |  |  |
-| CT-INSC-09 |  |  |  |  |  |  |
+| CT-INSC-01 | 11/10/2026 | Giulia Cadorin | Sem login, ao clicar em Add Course na página de Introduction to AI, a página do curso exibiu o alerta "To register for a course it is necessary to be logged into the system. Press AMICOURSES to return to the main screen and be able to register in the system". | Passou | — |
+| CT-INSC-02 | 11/10/2026 | Giulia Cadorin | Com amico logado, ao clicar em Add Course em Introduction to AI2, o sistema foi para /profile/amico e o curso apareceu em Inscribed Courses, no fim da lista, depois dos 4 cursos anteriores. | Passou | — |
+| CT-INSC-03 | 11/10/2026 | Giulia Cadorin | Ao clicar de novo em Add Course em Introduction to AI2, apareceu o alerta "You are already registered in this course." e o curso continuou aparecendo uma única vez na lista de Inscribed Courses. | Passou | — |
+| CT-INSC-04 | 11/10/2026 | Giulia Cadorin | Ao clicar em Add Course em Matematicas Para Gatos, apareceu o alerta "You are already registered in this course.". | Passou | — |
+| CT-INSC-05 | 11/10/2026 | Giulia Cadorin | Ao clicar em Add Course em AI Advanced Tips, apareceu o alerta "You have already completed this course." (e não o de já inscrito). | Passou | — |
+| CT-INSC-06 | 11/10/2026 | Giulia Cadorin | Depois de recarregar a página com F5, o alerta de curso concluído não apareceu mais. | Passou | — |
+| CT-INSC-07 | 11/10/2026 | Giulia Cadorin | Com amico logado, ao abrir /course/curso-que-nao-existe/add, o sistema mostrou a página de erro 500 ("Oops, something went wrong"). O log do servidor registrou NullPointerException em CourseInformationController.addCourseToUser (linha 128). Sem login, o endereço redireciona para /course/curso-que-nao-existe, que também retorna 500. | Falhou | nº da issue |
+| CT-INSC-08 | 11/10/2026 | Giulia Cadorin | Depois de uma requisição sem login a /course/introduction-to-ai/add (curl), o amico logado abriu /course/introduction-to-ai sem clicar em nada e viu o alerta "To register for a course it is necessary to be logged into the system...". O aviso de um usuário apareceu para outro. | Falhou | nº da issue|
+| CT-INSC-09 | 11/10/2026 | Giulia Cadorin | A página de Introduction to AI mostrou as datas 31-00-2019 e 30-00-2019, com o mês "00" no lugar de 01 e 07. A página de Introduction to AI2 mostrou 01-00-2023 e 11-00-2026. | Falhou | nº da issue |
