@@ -166,8 +166,8 @@ customizada. Funcionalmente correto; semanticamente, um status 403
 correto ("This is the practice 1 from amico", 33 bytes). O passo 3, executado
 com `curl -i`, retornou **HTTP 200 com corpo de 0 bytes** - o conteúdo não é
 entregue, mas a resposta não indica erro (sem 403/404). A regra de acesso
-funciona; a semântica HTTP está incorreta. Defeito registrado na issue 9 do
-MoodleController (download bloqueado responde 200 vazio).
+funciona; a semântica HTTP está incorreta. Defeito de semântica HTTP (200
+em vez de 403/404); sem issue aberta até o momento.
 
 Observação de execução: a primeira tentativa do passo 3 usou a URL `/13/4`,
 que não é a submissão de outro aluno - o practiceID 4 é a submissão "Not
@@ -175,7 +175,7 @@ Presented" do próprio amico (criada ao visitar a página), e o download dela
 retornou 200 com 140835 bytes (arquivo físico herdado de dados anteriores no
 disco). A URL foi corrigida para `/13/3` e o caso re-executado.
 
-## Casos de entrada inválida (CT-08 a CT-13)
+## Casos de entrada inválida (CT-08 a CT-12)
 
 Estes casos verificam a validação no servidor, enviando requisições diretas
 (via `curl`) que ignoram a interface. A motivação: os limites do formulário
@@ -201,7 +201,7 @@ recarregando a página da disciplina e inspecionando o HTML retornado.
 
 **Resultado obtido:** HTTP 302 e a nota **-5.0 foi gravada**. O servidor
 aceita qualquer `Double` sem validação de faixa; o `min="0"` do formulário é
-validação apenas de cliente. Bug reportado (nota sem validação de faixa).
+validação apenas de cliente. Issue #13.
 
 ### CT-09: Nota acima do máximo (1000)
 
@@ -215,7 +215,7 @@ validação apenas de cliente. Bug reportado (nota sem validação de faixa).
 | 2     | Recarregar a página e verificar a nota                                                                                        | Nota permanece dentro da faixa válida.   |
 
 **Resultado obtido:** HTTP 302 e a nota **1000.0 foi gravada**. Mesmo
-defeito do CT-08: validação de faixa inexistente no servidor. Bug reportado
+defeito do CT-08: validação de faixa inexistente no servidor. Issue #13
 (junto com o CT-08).
 
 ### CT-10: Nota com texto ("abc")
@@ -251,9 +251,8 @@ registrada como observação.
 **Resultado obtido:** HTTP 302 e a prática passou a aparecer como
 **"Entrega sem arquivo"** com link de download (status de entregue), embora o
 arquivo enviado não tivesse conteúdo útil. O `setPresented(true)` é executado
-com o nome preenchido, sem validar o conteúdo do arquivo. Bug reportado
-(prática marcada como entregue sem arquivo) - o mais grave encontrado, pois
-quebra a regra central do fluxo de práticas.
+com o nome preenchido, sem validar o conteúdo do arquivo. Issue #14 - o mais
+grave encontrado, pois quebra a regra central do fluxo de práticas.
 
 O link de download da submissão vazia foi testado: com o arquivo de 2 bytes,
 o download retorna exatamente o que foi gravado (2 bytes); com um arquivo de
@@ -265,39 +264,16 @@ Observação: com o campo `itemFile` ausente na requisição (multipart
 incompleto), o servidor responde HTTP 400 - o campo é obrigatório no parsing
 do Spring. O defeito se manifesta com um arquivo presente, porém sem conteúdo.
 
-### CT-12: Reenvio após correção
-
-- **Objetivo:** Verificar se uma submissão já corrigida pode ser alterada pelo
-  aluno. A interface esconde o formulário quando a prática está corrigida, mas
-  o servidor não verifica esse estado.
-- **Pré-condições:** `amico` logado via curl. Submissão do amico em Practice 1
-  corrigida (nota 7.3 nos dados originais; na execução, a nota já tinha sido
-  alterada pelos CT-08/09 para 1000 - o estado relevante é a submissão estar
-  corrigida, o que se mantém).
-- **Resultado esperado:** O servidor deveria rejeitar alterações em submissão
-  corrigida.
-
-| Passo | Ação                                                                                                                                                          | Resultado esperado do passo                 |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| 1     | `curl -b cookies_amico.txt -X POST .../practice/modify/introduction-to-ai/history-of-ai/12/1 -F "newName=Alteracao apos correcao" -F "itemFile=@reenvio.txt"` | Requisição rejeitada; submissão inalterada. |
-| 2     | Recarregar a página e verificar Practice 1                                                                                                                    | Nome e arquivo originais mantidos.          |
-
-**Resultado obtido:** HTTP 302 e a submissão corrigida foi alterada para
-**"Alteracao apos correcao"** (nome e arquivo substituídos). O servidor não
-verifica `isCorrected()` antes de aplicar a alteração. Bug reportado
-(submissão corrigida pode ser alterada pelo aluno) - compromete a integridade
-do processo de avaliação.
-
-### CT-13: Rename vazio com arquivo
+### CT-12: Rename vazio com arquivo
 
 - **Objetivo:** Verificar o comportamento com nome vazio.
 - **Pré-condições:** `amico` logado via curl.
 - **Resultado esperado:** Nada é alterado (o código exige nome preenchido).
 
-| Passo | Ação                                                                                                                                   | Resultado esperado do passo |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| 1     | `curl -b cookies_amico.txt -X POST .../practice/modify/introduction-to-ai/history-of-ai/13/4 -F "newName=" -F "itemFile=@reenvio.txt"` | Nada é alterado.            |
-| 2     | Recarregar a página                                                                                                                    | Estado inalterado.          |
+| Passo | Ação                                                                                                                                 | Resultado esperado do passo |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
+| 1     | `curl -b cookies_amico.txt -X POST .../practice/modify/introduction-to-ai/history-of-ai/13/4 -F "newName=" -F "itemFile=@vazio.txt"` | Nada é alterado.            |
+| 2     | Recarregar a página                                                                                                                  | Estado inalterado.          |
 
 **Resultado obtido:** Passou. HTTP 302 e nenhum dado foi alterado - o
 `if (!newName.isEmpty())` protege este caminho.
@@ -320,33 +296,31 @@ reinício volta aos dados originais):
    alterada por cada um: -5, depois 1000)
 5. CT-11: mesma sessão (a submissão 13/4 foi criada ao visitar a página e
    depois renomeada com arquivo vazio)
-6. CT-12: mesma sessão (a submissão 12/1, já alterada pelos CT-08/09, foi
-   renomeada e reenviada)
-7. CT-13: mesma sessão (rename vazio, nada alterado)
-8. Reinício da aplicação (dados originais)
-9. Reproduções das issues 8 e 9 (12/10): deleção de prática pelo professor,
-   visita de aluno sem submissão (500), download alheio (200 vazio)
+6. CT-12: mesma sessão (rename vazio, nada alterado)
+7. Reinício da aplicação (dados originais)
+8. Reproduções dos defeitos de integridade e semântica HTTP: deleção de
+   prática pelo professor, visita de aluno sem submissão (500), download
+   alheio (200 vazio)
 
-Os casos CT-01 a CT-07 foram executados pela interface; CT-08 a CT-13, via
+Os casos CT-01 a CT-07 foram executados pela interface; CT-08 a CT-12, via
 requisições diretas com `curl` (login por cookie de sessão), com verificação
 do estado no HTML retornado e na interface. As saídas dos comandos curl
 estão em `docs/evidencias/moodle/evidencias-curl.md`.
 
-| Caso       | Data       | Executor     | Resultado             | Evidência                                                                                                                                                                                                                                                                                                                                                                                    |
-| ---------- | ---------- | ------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CT-PRAT-01 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-01](evidencias/moodle/imagemqos1.png) - Practice 1 com a submissão própria (nota 7.3) e Practice 2 como "Not Presented"; submissões de outros alunos não visíveis.                                                                                                                                                                                                                 |
-| CT-PRAT-02 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-02](evidencias/moodle/imagemqos2.png) - Practice 2 após submissão: nome "Entrega final" e arquivo enviado; "Not Presented" não aparece mais.                                                                                                                                                                                                                                       |
-| CT-PRAT-03 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-03](evidencias/moodle/imagemqos3.png) - Como `amicoTeacher`: submissão "Entrega final" de amico com Calification 8.5 e corrigida.                                                                                                                                                                                                                                                  |
-| CT-PRAT-04 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-04](evidencias/moodle/imagemqos4.png) - Como `amico`: nota 8.5 exibida sem qualquer campo de edição (a interface não oferece a ação ao aluno).                                                                                                                                                                                                                                     |
-| CT-PRAT-05 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-05](evidencias/moodle/imagemqos3.png) - Como `amicoTeacher`: formulário de gerência do item (Rename/Type/File/Save/Delete) + submissões dos alunos com campo Calification; sem formulário de submissão (campo de arquivo).                                                                                                                                                         |
-| CT-PRAT-06 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-06](evidencias/moodle/imagemqos6a.png) - Como `student-35`: página de erro amigável do projeto exibida; disciplina não acessível. Observação: primeira execução usou `student-30`, que está inscrito no curso (premissa do caso corrigida para `student-35`).                                                                                                                      |
-| CT-PRAT-07 | 11/10/2026 | gabilima2004 | Passou (com ressalva) | ![CT-PRAT-07](evidencias/moodle/imagemqos7b.png) + [arquivo baixado](evidencias/moodle/Practice%201.txt) - Passo 2: download da própria submissão retorna o arquivo correto (33 bytes). Passo 3 (re-executado em 12/10 com a URL corrigida `/13/3`): HTTP 200 com corpo de 0 bytes - o conteúdo não é entregue, mas sem 403/404 (issue 9). Saídas em `evidencias/moodle/evidencias-curl.md`. |
-| CT-08      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Nota -5.0 gravada no banco (verificada no HTML da página após o POST via curl). Bug: nota sem validação de faixa no servidor.                                                                                                                                                                                                                                                                |
-| CT-09      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Nota 1000.0 gravada no banco. Mesmo defeito do CT-08.                                                                                                                                                                                                                                                                                                                                        |
-| CT-10      | 11/10/2026 | gabilima2004 | Passou (com ressalva) | HTTP 400 com página de erro padrão do Spring, sem mensagem amigável. Requisição rejeitada corretamente.                                                                                                                                                                                                                                                                                      |
-| CT-11      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Prática marcada como entregue ("Entrega sem arquivo", com link de download) com arquivo sem conteúdo útil. O link baixa o arquivo gravado (2 bytes de CRLF); com 0 bytes reais, o upload é pulado e o link aponta para arquivo físico antigo. Bug: `setPresented(true)` sem validar o arquivo. Saídas em `evidencias/moodle/evidencias-curl.md`.                                             |
-| CT-12      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Submissão corrigida alterada para "Alteracao apos correcao" pelo aluno (nota anterior mantida). Bug: servidor não verifica `isCorrected()`. Saídas em `evidencias/moodle/evidencias-curl.md`.                                                                                                                                                                                                |
-| CT-13      | 11/10/2026 | gabilima2004 | Passou                | Nenhum dado alterado com nome vazio; o `if (!newName.isEmpty())` protege o caminho.                                                                                                                                                                                                                                                                                                          |
+| Caso       | Data       | Executor     | Resultado             | Evidência                                                                                                                                                                                                                                                                                                                                                                          |
+| ---------- | ---------- | ------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CT-PRAT-01 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-01](evidencias/moodle/imagemqos1.png) - Practice 1 com a submissão própria (nota 7.3) e Practice 2 como "Not Presented"; submissões de outros alunos não visíveis.                                                                                                                                                                                                       |
+| CT-PRAT-02 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-02](evidencias/moodle/imagemqos2.png) - Practice 2 após submissão: nome "Entrega final" e arquivo enviado; "Not Presented" não aparece mais.                                                                                                                                                                                                                             |
+| CT-PRAT-03 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-03](evidencias/moodle/imagemqos3.png) - Como `amicoTeacher`: submissão "Entrega final" de amico com Calification 8.5 e corrigida.                                                                                                                                                                                                                                        |
+| CT-PRAT-04 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-04](evidencias/moodle/imagemqos4.png) - Como `amico`: nota 8.5 exibida sem qualquer campo de edição (a interface não oferece a ação ao aluno).                                                                                                                                                                                                                           |
+| CT-PRAT-05 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-05](evidencias/moodle/imagemqos3.png) - Como `amicoTeacher`: formulário de gerência do item (Rename/Type/File/Save/Delete) + submissões dos alunos com campo Calification; sem formulário de submissão (campo de arquivo).                                                                                                                                               |
+| CT-PRAT-06 | 11/10/2026 | gabilima2004 | Passou                | ![CT-PRAT-06](evidencias/moodle/imagemqos6a.png) - Como `student-35`: página de erro amigável do projeto exibida; disciplina não acessível. Observação: primeira execução usou `student-30`, que está inscrito no curso (premissa do caso corrigida para `student-35`).                                                                                                            |
+| CT-PRAT-07 | 11/10/2026 | gabilima2004 | Passou (com ressalva) | ![CT-PRAT-07](evidencias/moodle/imagemqos7b.png) + [arquivo baixado](evidencias/moodle/Practice%201.txt) - Passo 2: download da própria submissão retorna o arquivo correto (33 bytes). Passo 3 (re-executado em 12/10 com a URL corrigida `/13/3`): HTTP 200 com corpo de 0 bytes - o conteúdo não é entregue, mas sem 403/404. Saídas em `evidencias/moodle/evidencias-curl.md`. |
+| CT-08      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Nota -5.0 gravada no banco (verificada no HTML da página após o POST via curl). Bug: nota sem validação de faixa no servidor. Issue #13.                                                                                                                                                                                                                                         |
+| CT-09      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Nota 1000.0 gravada no banco. Mesmo defeito do CT-08. Issue #13.                                                                                                                                                                                                                                                                                                                |
+| CT-10      | 11/10/2026 | gabilima2004 | Passou (com ressalva) | HTTP 400 com página de erro padrão do Spring, sem mensagem amigável. Requisição rejeitada corretamente.                                                                                                                                                                                                                                                                            |
+| CT-11      | 11/10/2026 | gabilima2004 | Falhou (bug)          | Prática marcada como entregue ("Entrega sem arquivo", com link de download) com arquivo sem conteúdo útil. O link baixa o arquivo gravado (2 bytes de CRLF); com 0 bytes reais, o upload é pulado e o link aponta para arquivo físico antigo. Bug: `setPresented(true)` sem validar o arquivo. Issue #14. Saídas em `evidencias/moodle/evidencias-curl.md`.                        |
+| CT-12      | 11/10/2026 | gabilima2004 | Passou                | Nenhum dado alterado com nome vazio; o `if (!newName.isEmpty())` protege o caminho.                                                                                                                                                                                                                                                                                                |
 
 ### Resumo dos defeitos encontrados nos casos de entrada inválida
 
@@ -354,25 +328,25 @@ estão em `docs/evidencias/moodle/evidencias-curl.md`.
 | --------------------------------------------------- | ------------ | ---------------------------- |
 | Nota sem validação de faixa (aceita -5, 1000)       | CT-08, CT-09 | Média                        |
 | Prática marcada como entregue com arquivo vazio     | CT-11        | Alta                         |
-| Submissão corrigida pode ser alterada pelo aluno    | CT-12        | Alta                         |
 | Erro 400 sem mensagem amigável na conversão de nota | CT-10        | Baixa (passou, com ressalva) |
 
-Todos os defeitos foram reportados no bug tracker (issues do
-MoodleController, criadas no GitHub).
+Issues abertas: nota sem faixa (#13), entrega vazia (#14), `count()` como
+ID (#16), curso inexistente (#10). Sem issue aberta: disciplina inexistente
+(500) e download bloqueado com 200 vazio.
 
-### Reprodução das issues 1, 2 e 3 no sistema em execução
+### Reprodução dos NPEs no sistema em execução
 
 Para responder à pergunta "o NPE visto no teste com mock acontece no sistema
-real?", as três issues foram reproduzidas com o app rodando, via requisições
+real?", os três cenários foram reproduzidos com o app rodando, via requisições
 diretas com `curl` (login por cookie de sessão):
 
-| Issue | Requisição                                                                  | Resultado real     | Conclusão                                                                                                                                    |
-| ----- | --------------------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | `GET /moodle/curso-que-nao-existe/history-of-ai` (logado)                   | HTTP 500           | Confirmada: NPE ocorre em execução. Evidência: ![erro 500](evidencias/moodle/imgqoserro500.png)                                              |
-| 2     | `GET /moodle/introduction-to-ai/disciplina-inexistente` (logado e inscrito) | HTTP 500           | Confirmada: NPE ocorre em execução. Mesma evidência.                                                                                         |
-| 3     | `POST /moodle/upload/studyItem/...` (anônimo)                               | HTTP 302 -> /login | Diferente do previsto: a segurança do Spring intercepta antes do controller; o NPE é latente (fragilidade), não ativo. Issue reclassificada. |
+| Cenário                | Requisição                                                                  | Resultado real     | Conclusão                                                                                                                                                                            |
+| ---------------------- | --------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Curso inexistente      | `GET /moodle/curso-que-nao-existe/history-of-ai` (logado)                   | HTTP 500           | Confirmado: NPE ocorre em execução. Evidência: ![erro 500](evidencias/moodle/imgqoserro500.png). Defeito também reportado na issue #10 do repositório (página de curso inexistente). |
+| Disciplina inexistente | `GET /moodle/introduction-to-ai/disciplina-inexistente` (logado e inscrito) | HTTP 500           | Confirmado: NPE ocorre em execução. Mesma evidência.                                                                                                                                 |
+| Upload anônimo         | `POST /moodle/upload/studyItem/...` (anônimo)                               | HTTP 302 -> /login | Diferente do previsto: a segurança do Spring intercepta antes do controller; o NPE é latente (fragilidade), não ativo.                                                               |
 
-Verificação adicional da issue 3: após a tentativa anônima, nada foi
+Verificação adicional do upload anônimo: após a tentativa, nada foi
 persistido (o item "Aula teste" não aparece na disciplina) - integridade
 preservada.
 
