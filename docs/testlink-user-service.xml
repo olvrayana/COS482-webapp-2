@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcases>
+  <testcase name="CT-USR-01 - Cadastrar uma conta válida">
+    <summary><![CDATA[Verificar o cadastro bem-sucedido e a criação de uma conta de aluno.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada. Os dados não contêm o username heleno_manual nem o e-mail heleno.manual@exemplo.com.br.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/signup]]></actions>
+        <expectedresults><![CDATA[O formulário de cadastro é exibido.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Preencher username heleno_manual, e-mail heleno.manual@exemplo.com.br, senha senha123 e repetir a senha]]></actions>
+        <expectedresults><![CDATA[Os quatro campos ficam preenchidos com os dados informados.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Clicar em Sign Up!]]></actions>
+        <expectedresults><![CDATA[O sistema exibe a tela de login sem mensagem de erro.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Entrar em http://localhost:8000/login com username heleno_manual e senha senha123]]></actions>
+        <expectedresults><![CDATA[O login é realizado; a conta heleno_manual foi criada como aluno.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+</testcases>
