@@ -136,11 +136,11 @@ O CT-USR-01 cria a conta descartável **heleno_manual** / **senha123**, com e-ma
 
 - **Objetivo:** Verificar que uma imagem enviada é gravada e servida pela API.
 - **Pré-condições:** CT-USR-01 concluído. Ter um arquivo JPEG pequeno disponível e manter Basic Auth `heleno_manual` / `senha123`.
-- **Resultado esperado:** Envio aceito, nome da imagem atualizado e imagem acessível pela rota de consulta.
+- **Resultado esperado:** Envio aceito com HTTP 200 e imagem acessível pela rota de consulta. A resposta JSON do upload não inclui `urlProfileImage`.
 
 | Passo | Ação | Resultado esperado do passo |
 |---|---|---|
-| 1 | Enviar `PUT http://localhost:8000/api/users/img/heleno_manual`; no Postman, escolher **Body > form-data**, adicionar a chave `profileImage` do tipo **File** e selecionar o JPEG | Resposta HTTP 200 e JSON do usuário com `urlProfileImage` igual a `profile-{userID}.jpg`. |
+| 1 | Enviar `PUT http://localhost:8000/api/users/img/heleno_manual`; no Postman, escolher **Body > form-data**, adicionar a chave `profileImage` do tipo **File** e selecionar o JPEG | Resposta HTTP 200 com o JSON básico do usuário. Esse JSON não inclui `urlProfileImage`; confirmar o upload pelo GET do passo seguinte. |
 | 2 | Enviar `GET http://localhost:8000/api/users/img/heleno_manual` | Resposta HTTP 200 com a imagem enviada; o tipo de conteúdo é `image/jpeg`. |
 
 ### CT-USR-11: Impedir que um aluno exclua uma conta
@@ -167,19 +167,20 @@ O CT-USR-01 cria a conta descartável **heleno_manual** / **senha123**, com e-ma
 
 ## Registro de execução
 
-Preencher ao executar. Em caso de falha, anexar evidência e abrir uma issue no GitHub.
+
+Preencher ao executar usando os dados enviados para cada caso. Em caso de falha, abrir uma issue no GitHub e registrar sua URL.
 
 | Caso | Data | Executor | Resultado obtido | Status (Passou/Falhou) | Evidência | Issue |
 |---|---|---|---|---|---|---|
-| CT-USR-01 |  |  |  |  |  |  |
-| CT-USR-02 |  |  |  |  |  |  |
-| CT-USR-03 |  |  |  |  |  |  |
-| CT-USR-04 |  |  |  |  |  |  |
-| CT-USR-05 |  |  |  |  |  |  |
-| CT-USR-06 |  |  |  |  |  |  |
-| CT-USR-07 |  |  |  |  |  |  |
-| CT-USR-08 |  |  |  |  |  |  |
-| CT-USR-09 |  |  |  |  |  |  |
-| CT-USR-10 |  |  |  |  |  |  |
-| CT-USR-11 |  |  |  |  |  |  |
-| CT-USR-12 |  |  |  |  |  |  |
+| CT-USR-01 | 2026-10-12 | Thomas Cardoso | Conta cadastrada e login realizado com sucesso. | Passou | ![CT-USR-01-01](evidencias/userservice/CT-USR-01-01.png)<br>![CT-USR-01-02](evidencias/userservice/CT-USR-01-02.png)<br>![CT-USR-01-03](evidencias/userservice/CT-USR-01-03.png) | Não se aplica |
+| CT-USR-02 | 2026-10-12 | Thomas Cardoso | Cadastro recusado para senhas diferentes; tentativa de login sem conta não foi aceita. | Passou | ![CT-USR-02-01](evidencias/userservice/CT-USR-02-01.png)<br>![CT-USR-02-02](evidencias/userservice/CT-USR-02-02.png)<br>![CT-USR-02-03](evidencias/userservice/CT-USR-02-03.png) | Não se aplica |
+| CT-USR-03 | 2026-10-12 | Thomas Cardoso | Cadastro recusado por username com caracteres inválidos. | Passou | ![CT-USR-03-01](evidencias/userservice/CT-USR-03-01.png)<br>![CT-USR-03-02](evidencias/userservice/CT-USR-03-02.png) | Não se aplica |
+| CT-USR-04 | 2026-10-12 | Thomas Cardoso | Cadastro recusado por formato inválido do e-mail. | Passou | ![CT-USR-04-01](evidencias/userservice/CT-USR-04-01.png)<br>![CT-USR-04-02](evidencias/userservice/CT-USR-04-02.png) | Não se aplica |
+| CT-USR-05 | 2026-10-12 | Thomas Cardoso | Cadastro recusado porque o username já estava cadastrado. | Passou | ![CT-USR-05-01](evidencias/userservice/CT-USR-05-01.png)<br>![CT-USR-05-02](evidencias/userservice/CT-USR-05-02.png) | Não se aplica |
+| CT-USR-06 | 2026-10-12 | Thomas Cardoso | Cadastro recusado porque o e-mail já estava cadastrado. | Passou | ![CT-USR-06-01](evidencias/userservice/CT-USR-06-01.png)<br>![CT-USR-06-02](evidencias/userservice/CT-USR-06-02.png) | Não se aplica |
+| CT-USR-07 | 2026-10-12 | Thomas Cardoso | Perfil atualizado pela API e valores válidos confirmados na consulta subsequente. | Passou | ![CT-USR-07-01](evidencias/userservice/CT-USR-07-01.png)<br>![CT-USR-07-02](evidencias/userservice/CT-USR-07-02.png)<br>![CT-USR-07-03](evidencias/userservice/CT-USR-07-03.png) | Não se aplica |
+| CT-USR-08 | 2026-10-12 | Thomas Cardoso | Campos inválidos ignorados; dados válidos anteriores permaneceram no perfil. | Passou | ![CT-USR-08-01](evidencias/userservice/CT-USR-08-01.png)<br>![CT-USR-08-02](evidencias/userservice/CT-USR-08-02.png) | Não se aplica |
+| CT-USR-09 | 2026-10-12 | Thomas Cardoso | API retornou a imagem padrão do perfil. | Passou | ![CT-USR-09-01](evidencias/userservice/CT-USR-09-01.png) | Não se aplica |
+| CT-USR-10 | 2026-10-12 | Thomas Cardoso | Upload aceito com HTTP 200 e imagem consultada pela API. | Passou | ![CT-USR-10-01](evidencias/userservice/CT-USR-10-01.png)<br>![CT-USR-10-02](evidencias/userservice/CT-USR-10-02.png) | Não se aplica |
+| CT-USR-11 | 2026-10-12 | Thomas Cardoso | Exclusão negada para aluno; conta permaneceu disponível. | Passou | ![CT-USR-11-01](evidencias/userservice/CT-USR-11-01.png)<br>![CT-USR-11-02](evidencias/userservice/CT-USR-11-02.png) | Não se aplica |
+| CT-USR-12 | 2026-10-12 | Thomas Cardoso | Conta removida por administrador; autenticação posterior da conta removida retornou HTTP 401. | Passou | ![CT-USR-12-01](evidencias/userservice/CT-USR-12-01.png)<br>![CT-USR-12-02](evidencias/userservice/CT-USR-12-02.png) | Não se aplica |
