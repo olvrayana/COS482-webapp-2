@@ -57,12 +57,16 @@ import com.example.demo.user.UserRepository;
  *
  * Defeitos encontrados (issues no GitHub):
  *  - allCourses com curso inexistente -> NullPointerException (reproduzido:
- *    HTTP 500 em execução)
+ *    HTTP 500 em execução) - issue #10
  *  - allCourses com disciplina inexistente -> NullPointerException (reproduzido:
  *    HTTP 500 em execução)
  *  - uploadStudyItem sem verificação de usuário nulo -> fragilidade latente
  *    (a segurança do Spring intercepta anônimos em execução; o NPE só ocorre
  *    se a configuração mudar)
+ *  - nota sem validação de faixa no servidor - issue #13
+ *  - prática marcada como entregue com arquivo vazio - issue #14
+ *  - count() usado como ID ao criar submissão Not Presented (reproduzido:
+ *    HTTP 500 com EntityNotFoundException) - issue #16
  */
 public class MoodleControllerTest {
 
@@ -237,7 +241,7 @@ public class MoodleControllerTest {
 	}
 
 	// BUG conhecido: curso inexistente -> NPE em course.getInscribedUsers().
-	// Reproduzido em execução (HTTP 500). Issue no GitHub (MoodleController).
+	// Reproduzido em execução (HTTP 500). Issue #10 no GitHub.
 	@Test
 	public void allCourses_unknownCourseThrowsNullPointerException() {
 		when(sessionUserComponent.getLoggedUser()).thenReturn(student);
@@ -249,7 +253,8 @@ public class MoodleControllerTest {
 
 	// BUG conhecido: disciplina inexistente -> NPE em subject.getInternalName()
 	// depois do bloco if (subject != null). Reproduzido em execução (HTTP 500).
-	// Issue no GitHub (MoodleController).
+	// Sem issue própria no GitHub; documentado no relatório de execução
+	// (docs/casos-de-teste-manuais-praticas-moodle.md).
 	@Test
 	public void allCourses_unknownSubjectThrowsNullPointerException() {
 		course.getInscribedUsers().add(student);
@@ -367,7 +372,8 @@ public class MoodleControllerTest {
 	// Fragilidade latente: usuário anônimo -> NPE em user.isStudent() (os outros
 	// métodos verificam user != null, este não). Em execução a segurança do Spring
 	// intercepta anônimos (302 -> /login); o NPE só ocorre se a configuração mudar.
-	// Issue no GitHub (MoodleController).
+	// Sem issue própria no GitHub; documentado no relatório de execução
+	// (docs/casos-de-teste-manuais-praticas-moodle.md).
 	@Test
 	public void uploadStudyItem_anonymousUserThrowsNullPointerException() throws Exception {
 		when(sessionUserComponent.getLoggedUser()).thenReturn(null);

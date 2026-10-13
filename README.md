@@ -54,8 +54,11 @@ Total: 96 testes unitários, todos executando sem falhas.
 Os defeitos encontrados nos testes estão reportados nas issues do repositório:
 
 - [Lista de issues](https://github.com/olvrayana/COS482-webapp-2/issues)
-- Defeitos do `MoodleController`: 3 NPEs (2 reproduzidos em execução com HTTP 500, 1 fragilidade latente), nota sem validação de faixa, prática entregue com arquivo vazio, submissão corrigida alterável pelo aluno, erro 400 sem mensagem amigável, `count()` usado como ID (reproduzido: HTTP 500 com `EntityNotFoundException`), download bloqueado com 200 vazio
-- [Exemplo documentado](docs/issue-course-not-found-500.md): erro 500 com curso inexistente
+- [#13](https://github.com/olvrayana/COS482-webapp-2/issues/13) - Nota de prática aceita qualquer valor via endpoint (sem validação de faixa no servidor)
+- [#14](https://github.com/olvrayana/COS482-webapp-2/issues/14) - Prática pode ser marcada como entregue com arquivo vazio (modifyPractice)
+- [#16](https://github.com/olvrayana/COS482-webapp-2/issues/16) - count() usado como ID ao criar submissão Not Presented (allCourses)
+- [#10](https://github.com/olvrayana/COS482-webapp-2/issues/10) - Página de um curso inexistente retorna erro 500 em vez de 404
+- Demais defeitos observados (NPE com disciplina inexistente, fragilidade do upload anônimo, reenvio pós-correção, download bloqueado com 200 vazio) estão documentados no [relatório de execução dos casos manuais](docs/casos-de-teste-manuais-praticas-moodle.md) e nos comentários dos testes
 
 ### Como executar os testes
 
