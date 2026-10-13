@@ -92,8 +92,8 @@ A estratégia abrangerá:
 | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Gabriella Lima  | Teste unitário da classe MoodleController; Teste manual da funcionalidade "submissão e correção de práticas" (TestLink: `docs/testlink-praticas-moodle.xml`); 1 Teste E2E (Selenium). |
 | Beatriz Farias  | Teste unitário da classe AdminController; Teste manual da funcionalidade "modificar curso" (TestLink: `docs/testlink-modify-course.xml`); 1 Teste E2E (Selenium).                     |
-| Rayana Oliveira | Teste unitário da classe SignUpController; Teste manual da funcionalidade "cadastro de novo utilizador"; 1 Teste E2E (Selenium).                                                                                  |
-| Thomas Cardoso  | Teste unitário da classe UserService; Teste manual da funcionalidade "cadastro, perfil e exclusão de usuário" (TestLink: `docs/testlink-user-service.xml`); 1 Teste E2E (Selenium).                |
+| Rayana Oliveira | Teste unitário da classe SignUpController; Teste manual da funcionalidade "cadastro de novo utilizador"; 1 Teste E2E (Selenium).                                                      |
+| Thomas Cardoso  | Teste unitário da classe UserService; Teste manual da funcionalidade "cadastro, perfil e exclusão de usuário" (TestLink: `docs/testlink-user-service.xml`); 1 Teste E2E (Selenium).   |
 | Giulia Cadorin  | Teste unitário da classe CourseInformationController; Teste manual da funcionalidade "inscrição em curso" (TestLink: `docs/testlink-inscricao-curso.xml`); 1 Teste E2E (Selenium).    |
 
 ## 13. Necessidades de equipe e treinamento (Staffing and training needs)

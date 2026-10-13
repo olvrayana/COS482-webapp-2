@@ -4,13 +4,13 @@ Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pel
 
 ## Grupo
 
-| Integrante      | GitHub                                              | Responsabilidade (Entrega 1)                                                                     |
-| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Gabriella Lima  | [gabilima2004](https://github.com/gabilima2004)     | Testes unitários do `MoodleController`; caso de teste manual da submissão e correção de práticas |
-| Beatriz Farias  | [beatriz-farias](https://github.com/beatriz-farias) | Testes unitários do `AdminController`; caso de teste manual de modificar curso                   |
-| Rayana Oliveira | [olvrayana](https://github.com/olvrayana)           | Testes unitários do `SignUpController`; caso de teste manual de cadastro de novo utilizador     |
+| Integrante      | GitHub                                              | Responsabilidade (Entrega 1)                                                                      |
+| --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Gabriella Lima  | [gabilima2004](https://github.com/gabilima2004)     | Testes unitários do `MoodleController`; caso de teste manual da submissão e correção de práticas  |
+| Beatriz Farias  | [beatriz-farias](https://github.com/beatriz-farias) | Testes unitários do `AdminController`; caso de teste manual de modificar curso                    |
+| Rayana Oliveira | [olvrayana](https://github.com/olvrayana)           | Testes unitários do `SignUpController`; caso de teste manual de cadastro de novo utilizador       |
 | Thomas Cardoso  | [thomascard](https://github.com/thomascard)         | Testes unitários do `UserService`; caso de teste manual de cadastro, perfil e exclusão de usuário |
-| Giulia Cadorin  | [giuliacadorin](https://github.com/giuliacadorin)   | Testes unitários do `CourseInformationController`; caso de teste manual de inscrição em curso    |
+| Giulia Cadorin  | [giuliacadorin](https://github.com/giuliacadorin)   | Testes unitários do `CourseInformationController`; caso de teste manual de inscrição em curso     |
 
 ## Artefatos da Entrega 1
 
@@ -32,13 +32,13 @@ Total: 107 testes unitários documentados.
 
 ### Casos de teste manuais
 
-| Funcionalidade                              | Documento                                                                                   | Responsável    |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------- |
-| Submissão e correção de práticas (12 casos) | [casos-de-teste-manuais-praticas-moodle.md](docs/casos-de-teste-manuais-praticas-moodle.md) | Gabriella Lima |
-| Modificar curso                             | [casos-de-teste-manuais-modify-course.md](docs/casos-de-teste-manuais-modify-course.md)     | Beatriz Farias |
-| Inscrição em curso                          | [casos-de-teste-manuais-inscricao-curso.md](docs/casos-de-teste-manuais-inscricao-curso.md) | Giulia Cadorin |
-| Cadastro, perfil e exclusão de usuário (12 casos) | [casos-de-teste-manuais-user-service.md](docs/casos-de-teste-manuais-user-service.md) | Thomas Cardoso |
-| Cadastro de novo utilizador                 | [casos-de-teste-manuais-singup.md](docs/casos-de-teste-manuais-signup.md)             | Rayana Oliveira|
+| Funcionalidade                                    | Documento                                                                                   | Responsável     |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------------- |
+| Submissão e correção de práticas (12 casos)       | [casos-de-teste-manuais-praticas-moodle.md](docs/casos-de-teste-manuais-praticas-moodle.md) | Gabriella Lima  |
+| Modificar curso                                   | [casos-de-teste-manuais-modify-course.md](docs/casos-de-teste-manuais-modify-course.md)     | Beatriz Farias  |
+| Inscrição em curso                                | [casos-de-teste-manuais-inscricao-curso.md](docs/casos-de-teste-manuais-inscricao-curso.md) | Giulia Cadorin  |
+| Cadastro, perfil e exclusão de usuário (12 casos) | [casos-de-teste-manuais-user-service.md](docs/casos-de-teste-manuais-user-service.md)       | Thomas Cardoso  |
+| Cadastro de novo utilizador                       | [casos-de-teste-manuais-singup.md](docs/casos-de-teste-manuais-signup.md)                   | Rayana Oliveira |
 
 ### TestLink
 
