@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcases>
+  <testcase name="CT-PRAT-01 - Aluno visualiza suas práticas (própria submissão e Not Presented)">
+    <summary><![CDATA[Verificar que, ao abrir a página da disciplina, o aluno vê a própria submissão onde já existe e "Not Presented" onde não existe; as submissões de outros alunos não aparecem.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada (dados originais). Usuário amico / senha pass é aluno, inscrito no curso Introduction to AI. Nos dados originais, amico já tem submissão em Practice 1 (nota 7.3, corrigida) e não tem submissão em Practice 2.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/login e entrar com usuário amico e senha pass]]></actions>
+        <expectedresults><![CDATA[Login realizado e página inicial exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/moodle/introduction-to-ai/history-of-ai]]></actions>
+        <expectedresults><![CDATA[Página da disciplina History of AI exibida, com os módulos 1, 2 e 3 e seus itens.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Localizar a seção de práticas (âncora "Evaluation")]]></actions>
+        <expectedresults><![CDATA["Practice 1" aparece com a submissão do próprio amico: "Name: practice 1", "Calification: 7.3".]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Verificar "Practice 2"]]></actions>
+        <expectedresults><![CDATA[Aparece como "Not Presented", com formulário de rename/upload disponível.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[5]]></step_number>
+        <actions><![CDATA[Verificar se submissões de outros alunos aparecem]]></actions>
+        <expectedresults><![CDATA[Não aparecem - cada aluno vê apenas a própria submissão.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-PRAT-02 - Aluno submete uma prática (renomeia e envia arquivo)">
+    <summary><![CDATA[Verificar o fluxo principal de submissão: o aluno renomeia a prática e envia um arquivo.]]></summary>
+    <preconditions><![CDATA[Executar antes o CT-PRAT-01 (amico logado, sem submissão em Practice 2). Ter um arquivo pronto para upload (ex.: minha-entrega.pdf).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Na página da disciplina, localizar "Practice 2"]]></actions>
+        <expectedresults><![CDATA[A prática aparece com "Not Presented" e o formulário de submissão (campo Rename + arquivo + Save).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[No campo "Rename", digitar "Entrega final"]]></actions>
+        <expectedresults><![CDATA[O campo aceita o texto.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[No campo de arquivo, selecionar minha-entrega.pdf]]></actions>
+        <expectedresults><![CDATA[O nome do arquivo aparece no campo.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Clicar em "Save"]]></actions>
+        <expectedresults><![CDATA[A página recarrega (redirect para a mesma disciplina).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[5]]></step_number>
+        <actions><![CDATA[Verificar "Practice 2" novamente]]></actions>
+        <expectedresults><![CDATA[A submissão aparece com o nome "Entrega final" e o arquivo enviado; "Not Presented" não aparece mais.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-PRAT-03 - Professor corrige a prática e atribui nota">
+    <summary><![CDATA[Verificar o fluxo de correção: o professor atribui uma nota e a prática é marcada como corrigida.]]></summary>
+    <preconditions><![CDATA[Executar antes o CT-PRAT-02 (amico já submeteu "Entrega final" em Practice 2). Usuário amicoTeacher / senha pass é professor da disciplina History of AI.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Sair da conta do aluno e entrar como amicoTeacher / pass]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/moodle/introduction-to-ai/history-of-ai]]></actions>
+        <expectedresults><![CDATA[Página da disciplina exibida; o professor vê a lista de alunos (aba de estudantes).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Localizar a submissão "Entrega final" de amico (em Practice 2)]]></actions>
+        <expectedresults><![CDATA[A submissão aparece sem nota (0.0) e não corrigida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Atribuir a nota 8.5 e confirmar]]></actions>
+        <expectedresults><![CDATA[A página recarrega; a submissão passa a exibir a nota 8.5 e status de corrigida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-PRAT-04 - Aluno não pode atribuir nota">
+    <summary><![CDATA[Verificar o controle de acesso na correção: aluno não consegue alterar notas.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada (dados originais). Usuário amico / senha pass logado. A submissão de student-5 em Practice 2 existe nos dados originais.]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/moodle/introduction-to-ai/history-of-ai]]></actions>
+        <expectedresults><![CDATA[Página da disciplina exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Procurar campo/formulário de atribuição de nota]]></actions>
+        <expectedresults><![CDATA[Não existe formulário de nota para o aluno (a interface não oferece a ação).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Verificar a nota exibida na submissão de outro aluno]]></actions>
+        <expectedresults><![CDATA[A nota permanece a original (a regra !user.isStudent() bloqueia).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-PRAT-05 - Professor gerencia práticas, mas não submete">
+    <summary><![CDATA[Verificar o que o professor vê na seção de práticas: ele gerencia o item da prática (rename/delete do enunciado) e corrige submissões (nota), mas não possui o formulário de submissão de aluno (campo de arquivo + Uploaded).]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada (dados originais). Usuário amicoTeacher / senha pass logado (professor da disciplina).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[2]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amicoTeacher / pass]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/moodle/introduction-to-ai/history-of-ai]]></actions>
+        <expectedresults><![CDATA[Página da disciplina exibida (o professor é da disciplina).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Na seção Evaluation, observar o formulário junto a "Practice 1"]]></actions>
+        <expectedresults><![CDATA[Formulário de gerência do item: Rename + Type + File + Save + Delete (sem campo de arquivo de submissão).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[4]]></step_number>
+        <actions><![CDATA[Observar as submissões listadas abaixo do item]]></actions>
+        <expectedresults><![CDATA[Cada submissão mostra "Username: <aluno>" + File + campo Calification + Save.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[5]]></step_number>
+        <actions><![CDATA[Procurar o formulário de submissão do aluno (campo de arquivo + "Uploaded:")]]></actions>
+        <expectedresults><![CDATA[Não existe para o professor - a interface não oferece a ação.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-PRAT-06 - Usuário não-inscrito não acessa a página da disciplina">
+    <summary><![CDATA[Verificar o controle de acesso da página: usuário fora do curso recebe a página de erro.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada (dados originais). Nos dados originais, o curso Introduction to AI tem os alunos student-0 a student-34 (mais amico, professores e admin); o primeiro aluno fora dele é student-35 (senha pass-35).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como student-35 / pass-35]]></actions>
+        <expectedresults><![CDATA[Login realizado.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Abrir http://localhost:8000/moodle/introduction-to-ai/history-of-ai]]></actions>
+        <expectedresults><![CDATA[Página de erro amigável exibida (não a página da disciplina).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+  <testcase name="CT-PRAT-07 - Aluno baixa apenas a própria submissão">
+    <summary><![CDATA[Verificar a regra de download: aluno consegue baixar a própria submissão, mas não a de outro aluno.]]></summary>
+    <preconditions><![CDATA[Aplicação recém-iniciada (dados originais). Usuário amico / senha pass logado. A submissão de amico em Practice 1 é a practiceID 1; a de student-5 em Practice 2 é a practiceID 3 (a practiceID 4 é a submissão "Not Presented" do próprio amico, criada quando ele visita a página).]]></preconditions>
+    <execution_type><![CDATA[1]]></execution_type>
+    <importance><![CDATA[3]]></importance>
+    <steps>
+      <step>
+        <step_number><![CDATA[1]]></step_number>
+        <actions><![CDATA[Entrar como amico / pass e abrir a página da disciplina http://localhost:8000/moodle/introduction-to-ai/history-of-ai]]></actions>
+        <expectedresults><![CDATA[Página exibida.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[2]]></step_number>
+        <actions><![CDATA[Baixar a própria submissão em Practice 1 (link "File: practice 1")]]></actions>
+        <expectedresults><![CDATA[O arquivo é baixado com o conteúdo correto.]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+      <step>
+        <step_number><![CDATA[3]]></step_number>
+        <actions><![CDATA[Tentar baixar a submissão de student-5 (via URL direta /moodle/download/studyItem/introduction-to-ai/history-of-ai/13/3)]]></actions>
+        <expectedresults><![CDATA[Nenhum arquivo é retornado (a regra practice.getOwner().getUserID() == user.getUserID() bloqueia).]]></expectedresults>
+        <execution_type><![CDATA[1]]></execution_type>
+      </step>
+    </steps>
+  </testcase>
+</testcases>

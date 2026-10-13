@@ -44,6 +44,7 @@ Total: 107 testes unitários documentados.
 
 - [Inscrição em curso (export XML)](docs/testlink-inscricao-curso.xml) - Giulia Cadorin
 - [Modificar curso (export XML)](docs/testlink-modify-course.xml) - Beatriz Farias
+- [Práticas do Moodle (export XML)](docs/testlink-praticas-moodle.xml) - Gabriella Lima
 - [Cadastro de usuário (export XML, CT-USR-01)](docs/testlink-user-service.xml) - Thomas Cardoso
 
 ### Evidências
