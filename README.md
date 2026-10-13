@@ -2,6 +2,8 @@
 
 Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pela disciplina COS482 (2026.2) para a aplicação dos conceitos de qualidade e teste de software. O conteúdo original do projeto está preservado abaixo da seção [Projeto original](#projeto-original).
 
+Link relatório: https://docs.google.com/document/d/1VR0C1pJFIR12_h113qfcqETU2Q5_rqEBhK20jkbrTDM/edit?usp=sharing
+
 ## Grupo
 
 | Integrante      | GitHub                                              | Responsabilidade (Entrega 1)                                                                      |
