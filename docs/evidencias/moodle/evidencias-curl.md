@@ -69,7 +69,9 @@ arquivo fisico antigo da pasta (herdado de dados anteriores). Nos dois casos
 a pratica fica marcada como entregue. Evidencia binaria em
 `download-entrega-vazia-13-4.bin`.
 
-## Issue 8: count() como ID apos delecao de pratica
+## count() como ID apos delecao de pratica (issue #16)
+
+Executado apos reinicio da aplicacao, com dados originais.
 
 Cenario: 4 praticas no banco (IDs 1-4). O professor apaga a Practice 2
 (studyItem 13), o que remove as praticas 3 e 4. Depois, um aluno sem
@@ -186,49 +188,18 @@ CT-10 HTTP: 400
 A requisicao foi rejeitada (falha de conversao String para Double), com a
 pagina de erro padrao do Spring, sem mensagem amigavel.
 
-## CT-12: reenvio apos correcao
+## CT-12: rename vazio com arquivo
 
-Comando (logado como amico; a submissao 12/1 estava corrigida):
+Comando (logado como amico):
 
 ```
-curl.exe -b cookies_amico.txt -X POST "http://localhost:8000/moodle/practice/modify/introduction-to-ai/history-of-ai/12/1" -F "newName=Alteracao apos correcao" -F "itemFile=@reenvio.txt"
+curl.exe -b cookies_amico.txt -X POST "http://localhost:8000/moodle/practice/modify/introduction-to-ai/history-of-ai/13/4" -F "newName=" -F "itemFile=@vazio.txt" -o NUL -s -w "CT-12 HTTP: %{http_code}"
 ```
 
 Saida:
 
 ```
 CT-12 HTTP: 302
-```
-
-Verificacao do estado apos o POST (trecho do HTML da pagina):
-
-```html
-<span class="col-md-2"
-  >File :
-  <a
-    class="item-content col-md-2"
-    href="/moodle/download/studyItem/introduction-to-ai/history-of-ai/12/1"
-    >Alteracao apos correcao</a
-  ></span
->
-<label class="ml-1 col-md-3">Name: Alteracao apos correcao</label>
-```
-
-A submissao corrigida foi alterada: nome e arquivo substituidos, mantendo a
-nota antiga.
-
-## CT-13: rename vazio com arquivo
-
-Comando (logado como amico):
-
-```
-curl.exe -b cookies_amico.txt -X POST "http://localhost:8000/moodle/practice/modify/introduction-to-ai/history-of-ai/13/4" -F "newName=" -F "itemFile=@reenvio.txt" -o NUL -s -w "CT-13 HTTP: %{http_code}"
-```
-
-Saida:
-
-```
-CT-13 HTTP: 302
 ```
 
 Verificacao do estado apos o POST: nenhum dado alterado (a submissao

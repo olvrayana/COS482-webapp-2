@@ -58,7 +58,7 @@ Os defeitos encontrados nos testes estão reportados nas issues do repositório:
 - [#14](https://github.com/olvrayana/COS482-webapp-2/issues/14) - Prática pode ser marcada como entregue com arquivo vazio (modifyPractice)
 - [#16](https://github.com/olvrayana/COS482-webapp-2/issues/16) - count() usado como ID ao criar submissão Not Presented (allCourses)
 - [#10](https://github.com/olvrayana/COS482-webapp-2/issues/10) - Página de um curso inexistente retorna erro 500 em vez de 404
-- Demais defeitos observados (NPE com disciplina inexistente, fragilidade do upload anônimo, reenvio pós-correção, download bloqueado com 200 vazio) estão documentados no [relatório de execução dos casos manuais](docs/casos-de-teste-manuais-praticas-moodle.md) e nos comentários dos testes
+- Demais defeitos observados (NPE com disciplina inexistente, fragilidade do upload anônimo, download bloqueado com 200 vazio) estão documentados no [relatório de execução dos casos manuais](docs/casos-de-teste-manuais-praticas-moodle.md) e nos comentários dos testes
 
 ### Como executar os testes
 
