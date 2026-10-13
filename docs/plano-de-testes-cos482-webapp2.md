@@ -16,7 +16,7 @@ Conforme as exigências do trabalho:
 
 **Entrega 1:**
 * **Testes Unitários:** Pelo menos uma classe de alta complexidade por integrante. Cada classe sob teste terá **complexidade ciclomática mínima de 10** (desvios, laços, estruturas de controle).
-  * *Classe 1:* MoodleController (método `allCourses`, CC 13) - Responsável: Gabriella Lima
+  * *Classe 1:* MoodleController (método `allCourses`, CC 13 medida por PMD; classe com CC total 85) - Responsável: Gabriella Lima
   * *Classe 2:* AdminController (método `modifyCourse`, CC 13) - Responsável: Beatriz Farias
   * *Classe 3:* SignUpController (método `registered`, CC 16) - Responsável: Rayana Oliveira
   * *Classe 4:* UserService (método `updateUser`, CC 28) - Responsável: Thomas Cardoso
@@ -41,7 +41,7 @@ A estratégia abrangerá:
    * *Estrutural:* Alcançar ao menos **80% de cobertura todas-arestas** na classe de alta complexidade de cada integrante.
    * *Baseada em Defeitos:* Alcançar ao menos **80% de escore de mutação** nas mesmas classes.
 5. **Qualidade e Inspeção (Entrega 2):** Avaliação de atributos ISO/IEC 25010 e uso de SonarQube para inspeção de código (resolvendo problemas de pelo menos uma classe por integrante).
-6. **Gestão de Defeitos:** Bugs encontrados serão geridos no **GitHub Issues**. *Status: 9 defeitos do MoodleController documentados (3 NPEs reproduzidos em execução com HTTP 500, 4 de validação de entrada encontrados nos casos manuais via curl, 2 de integridade/semântica HTTP), além dos defeitos das demais classes.*
+6. **Gestão de Defeitos:** Bugs encontrados serão geridos no **GitHub Issues**. *Status: defeitos do MoodleController reportados (issues #13, #14, #16) e do CourseInformationController (issue #10): 2 NPEs reproduzidos em execução com HTTP 500, 1 fragilidade latente (upload anônimo), nota sem validação de faixa, entrega vazia e count() usado como ID (reproduzido com EntityNotFoundException). Demais defeitos observados documentados no relatório de execução dos casos manuais.*
 
 ## 7. Critérios de aprovação/reprovação do item (Item pass/fail criteria)
 * 100% dos testes devem executar sem falhas na esteira CI/ambiente de testes.
