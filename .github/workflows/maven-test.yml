@@ -22,3 +22,6 @@ jobs:
 
       - name: Run tests
         run: sh mvnw test
+
+      - name: SonarQube analysis
+        run: sh mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar -Dsonar.token=$SONAR_TOKEN
