@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -28,20 +28,18 @@ jobs:
 
       - name: Run tests
         run: |
-          export JAVA_HOME="$JAVA_HOME_8_X64"
-          export PATH="$JAVA_HOME/bin:$PATH"
           java -version
-          sh mvnw verify
+          sh mvnw -B verify
 
-      - name: Configure JDK 17 (Sonar scanner)
+      - name: Configure JDK 21 (Sonar scanner)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - name: SonarQube analysis
         run: |
-          export JAVA_HOME="$JAVA_HOME_17_X64"
+          export JAVA_HOME="$JAVA_HOME_21_X64"
           export PATH="$JAVA_HOME/bin:$PATH"
           java -version
           sh mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar -Dsonar.token=$SONAR_TOKEN
