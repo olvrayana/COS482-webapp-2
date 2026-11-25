@@ -1,6 +1,6 @@
 # COS482 - Qualidade de Software - Entrega 2
 
-Artefatos da Entrega 2, organizados por integrante e por exigência. O conteúdo da Entrega 1 está mais abaixo, sem alterações.
+Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pela disciplina COS482 (2026.2) para a aplicação dos conceitos de qualidade e teste de software. O conteúdo original do projeto está preservado abaixo da seção [Projeto original](#projeto-original).
 
 ## Distribuição de tarefas por integrante
 
