@@ -34,7 +34,9 @@ test('Aluno faz login e se inscreve em um curso', async ({ page }) => {
 
   // Redireciona ao perfil, com o curso em "Inscribed Courses"
   await expect(page).toHaveURL(`/profile/${USER}`);
-  await expect(page.locator('#inscribed-courses').getByText(COURSE_NAME, { exact: true })).toBeVisible();
+  const inscribedCourse = page.locator('#inscribed-courses').getByText(COURSE_NAME, { exact: true });
+  await inscribedCourse.scrollIntoViewIfNeeded(); // rola a página até o curso aparecer na tela
+  await expect(inscribedCourse).toBeVisible();
 });
 
 test.afterEach(async ({ page }) => {
