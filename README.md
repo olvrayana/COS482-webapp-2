@@ -1,3 +1,93 @@
+# COS482 - Qualidade de Software - Entrega 2
+
+Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pela disciplina COS482 (2026.2) para a aplicação dos conceitos de qualidade e teste de software. O conteúdo original do projeto está preservado abaixo da seção [Projeto original](#projeto-original).
+
+## Distribuição de tarefas por integrante
+
+| Integrante | Tarefas (Entrega 2) |
+| --- | --- |
+| Gabriella Lima | _(a preencher)_ |
+| Beatriz Farias | Teste de integração do `AdminController`; teste E2E de inscrição em curso (Playwright) |
+| Rayana Oliveira | _(a preencher)_ |
+| Thomas Cardoso | _(a preencher)_ |
+| Giulia Cadorin | _(a preencher)_ |
+
+## 1. Testes unitários melhorados (Mockito)
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| _(a preencher)_ | _(a preencher)_ | _(a preencher)_ |
+
+## 2. Testes de integração
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| [AdminControllerIntegrationTest.java](AMICOServer/src/test/java/com/example/demo/controllers/AdminControllerIntegrationTest.java) | Classe de teste de integração do `AdminController`: contexto Spring completo (`@SpringBootTest` + `MockMvc`), sem mocks, login real e verificação no banco H2. Cobre criação de professor e edição de curso pelo admin e a recusa para aluno. | Beatriz Farias |
+
+## 3. Medidas dos atributos de qualidade (ISO/IEC 25010)
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| _(a preencher)_ | _(a preencher)_ | _(a preencher)_ |
+
+## 4. Testes de sistema / E2E (ao menos um por integrante)
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| [inscricao-curso.spec.ts](playwright/tests/inscricao-curso.spec.ts) | Teste E2E (Playwright): aluno faz login e se inscreve no curso "Cocina Moderna"; confirma o redirecionamento ao perfil e o curso em "Inscribed Courses". | Beatriz Farias |
+
+## 5. Técnica funcional
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| _(a preencher)_ | _(a preencher)_ | _(a preencher)_ |
+
+## 6. Técnica estrutural (todas-arestas, mínimo 80% em ao menos uma classe de alta complexidade por integrante)
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| _(a preencher)_ | _(a preencher)_ | _(a preencher)_ |
+
+## 7. Técnica baseada em defeitos (escore de mutação, mínimo 80% nas mesmas classes)
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| _(a preencher)_ | _(a preencher)_ | _(a preencher)_ |
+
+## 8. Relatório de inspeção de código (SonarQube): prints antes e depois das correções, ao menos uma classe por integrante
+
+| Arquivo | Descrição | Responsável |
+| --- | --- | --- |
+| _(a preencher)_ | _(a preencher)_ | _(a preencher)_ |
+
+## Detalhes dos testes E2E (Playwright)
+
+**Por que Playwright:** a escolha foi pela familiaridade com a ferramenta. Já conhecendo sua API (locators, auto-wait, `expect` assíncrono, gravação de vídeo e trace), foi possível escrever e depurar os testes sem a curva de aprendizado de outra ferramenta, e o resultado é igualmente adequado para os testes de sistema pedidos na entrega.
+
+- Pasta: [playwright/](playwright/) (testes em [playwright/tests](playwright/tests))
+- Teste implementado: [inscricao-curso.spec.ts](playwright/tests/inscricao-curso.spec.ts) - o aluno `student-0` faz login, abre o curso "Cocina Moderna" e se inscreve, e o teste confirma o redirecionamento ao perfil e o curso em "Inscribed Courses". Antes de cada teste, o estado inicial é sempre o de visitante (se houver sessão ativa, é feito logout).
+
+Para rodar localmente, com o backend no ar em `http://localhost:8000`:
+
+```bash
+cd playwright
+npm install
+npx playwright install chromium
+npm test
+```
+
+### Workflow de CI dos testes E2E
+
+[.github/workflows/e2e.yml](.github/workflows/e2e.yml) roda a cada push, pull request ou disparo manual:
+
+1. instala o JDK 8 e sobe o backend (`mvnw spring-boot:run`);
+2. instala o Node, o Playwright e o Chromium;
+3. espera o backend responder em `http://localhost:8000`;
+4. executa `npx playwright test`;
+5. publica o artefato **`e2e-videos`** com os vídeos de todas as execuções (o `playwright.config.ts` usa `video: 'on'`), disponível para download na página da execução no GitHub Actions; em caso de falha, publica também o `backend-log`.
+
+---
+
 # COS482 - Testes de Software (Entrega 1)
 
 Fork do projeto [AMICOurses](https://github.com/analpa1997/AMICOurses) usado pela disciplina COS482 (2026.2) para a aplicação dos conceitos de qualidade e teste de software. O conteúdo original do projeto está preservado abaixo da seção [Projeto original](#projeto-original).
