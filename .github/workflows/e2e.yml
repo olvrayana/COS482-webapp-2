@@ -49,23 +49,12 @@ jobs:
         working-directory: playwright
         run: npx playwright test
 
-      # Os vídeos são gravados em tempo real; aqui são desacelerados para 0.5x para melhor visualização
-      - name: Slow videos to 0.5x
-        if: always()
-        run: |
-          mkdir -p videos-0.5x
-          find playwright/test-results -name '*.webm' | while read -r f; do
-            name=$(basename "$(dirname "$f")")
-            ffmpeg -y -loglevel error -i "$f" -filter:v "setpts=2.0*PTS" -an "videos-0.5x/${name}.webm"
-          done
-          ls -la videos-0.5x
-
-      - name: Upload videos (0.5x)
+      - name: Upload videos
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-videos-0.5x
-          path: videos-0.5x/
+          name: e2e-videos
+          path: playwright/test-results/**/*.webm
           if-no-files-found: warn
 
       - name: Upload backend log
